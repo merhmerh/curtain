@@ -1,5 +1,5 @@
 <script>
-import Kbs from '$comp/kbs.svelte';
+import Kbs from '$comp/Kbs.svelte';
 import Note from '../lib/components/Note.svelte';
 import Shortcut from '../lib/components/Shortcut.svelte';
 import Todo from '../lib/components/Todo.svelte';

@@ -2,7 +2,6 @@
 import { onMount } from 'svelte';
 import { isEditMode, config } from './app.store';
 import '../styles/main.scss';
-import { timeout } from '$fn/helper';
 import Header from '../lib/components/Header.svelte';
 let ipc;
 let ready;
@@ -47,9 +46,10 @@ async function getConfig() {
 
     main {
         height: calc(100% - 3rem);
-        display: grid;
+        justify-content: space-between;
         gap: 100px;
-        grid-template-columns: repeat(5, 1fr);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 }
 </style>
