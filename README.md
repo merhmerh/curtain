@@ -1,4 +1,4 @@
-# ![Logo](./.github/images/icon-32.svg) Curtain
+# ![Logo](./.github/images/icon-46.svg) Curtain
 
 #### A desktop overlay app
 
@@ -58,4 +58,4 @@ npm run build
 
 ## License
 
-Curtain is released under the MIT License. Feel free to use, modify, and distribute the app following the terms of the license.
+Curtain is released under the [MIT License](https://github.com/merhmerh/curtain/blob/main/LICENSE). Feel free to use, modify, and distribute the app following the terms of the license.
