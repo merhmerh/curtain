@@ -1,0 +1,119 @@
+{
+  "modules": [
+    "kbs",
+    "todo",
+    "shortcut",
+    "note",
+    "utilities"
+  ],
+  "kbs": [
+    {
+      "keys": [
+        "alt",
+        0,
+        1,
+        8,
+        5
+      ],
+      "value": "¹",
+      "description": "superscript of 1"
+    },
+    {
+      "keys": [
+        "alt",
+        0,
+        1,
+        7,
+        8
+      ],
+      "value": "²",
+      "description": "superscript of 2"
+    },
+    {
+      "keys": [
+        "alt",
+        1,
+        0,
+        0,
+        0,
+        3
+      ],
+      "value": "✓",
+      "description": "Tick",
+      "edit": false
+    },
+    {
+      "value": "≥",
+      "description": "More or equal than",
+      "keys": [
+        "alt",
+        "2",
+        "4",
+        "2"
+      ]
+    },
+    {
+      "value": "≤",
+      "description": "Less or equal than",
+      "keys": [
+        "alt",
+        "2",
+        "4",
+        "3"
+      ]
+    }
+  ],
+  "todos": [
+    {
+      "task": "Submit CAT2 form ",
+      "done": false
+    },
+    {
+      "task": "edit flow chart g.2.2, MV and NV only for bathroom",
+      "done": false
+    },
+    {
+      "task": "is there area scheme to get individual house in 1 development. example terrace",
+      "done": false
+    },
+    {
+      "task": "h.3.2 add planterbox",
+      "done": false
+    },
+    {
+      "task": "change request for toplevel, bicycle",
+      "done": true
+    }
+  ],
+  "shortcut": [
+    {
+      "filePath": "D:\\work\\mc\\template",
+      "name": "MC Form Template",
+      "icon": "",
+      "type": "folder"
+    },
+    {
+      "filePath": "https://docs.google.com/spreadsheets/d/15BHCgx9ey792-_sT4S6KARYAhQlUIln6/edit#gid=1140077695&fvid=1437474533",
+      "name": "google sheet",
+      "icon": "",
+      "type": "url"
+    },
+    {
+      "filePath": "C:\\Users\\arvin\\NTT DATA APAC\\NDSG-Delivery-FY23 - Project_BCA MC Final_Ext - 201 Shared folder with BIMLIFE\\00_RI Documentation\\RI Set 1",
+      "name": "RI 1 docs",
+      "icon": "",
+      "type": "folder"
+    }
+  ],
+  "note": [
+    {
+      "title": "MC team",
+      "content": "CX modeler:\nnathan - PT (start 11)\njesalyn - FT (start 24)\n~~joanne - FT (start 24)~~\n\nteam 1:\nchris\nbeverlyn\nee jia\njasalyn (FT join on 24)\nNathan\n\nteam 2:\nsep\npinglei\nmelody (low)\ndave\nshun juan (low)\ncharrisa\n\nSoon Chinge\nlingkon\nJoanne (FT join on 24)\n\nCX modeler:\nnathan - PT (start 11)\njesalyn - FT (start 24)\n~~joanne - FT (start 24)~~\n\n"
+    }
+  ],
+  "settings": {
+    "notes": {
+      "showLineNumbers": true
+    }
+  }
+}

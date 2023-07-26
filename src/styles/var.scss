@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+$main: var(--main);
+$bg-p: var(--bg-p);
+
+$bg-s: var(--bg-s);
+$bg-alt: var(--bg-alt);
+
+$accent: var(--accent);
+$accent-light: var(--accent-light);
+$accent-lightest: var(--accent-lightest);
+$accent-dark: var(--accent-dark);
+$accent-alt: var(--accent-alt);
+$accent-table: var(--accent-table);
+$url: var(--url);
+
+$main-alt: var(--main-alt);
+$main-light: var(--main-light);
+
+$grey-lightest: var(--grey-lightest);
+$grey-lighter: var(--grey-lighter);
+$grey-light: var(--grey-light);
+$grey: var(--grey);
+$grey-dark: var(--grey-dark);
+
+$scrollthumb: var(--scrollthumb);
+$scrollthumb-hover: var(--scrollthumb-hover);
+
+$muted: var(--muted);
+$red: #e9686a;
+$warning: #d1393b;
+$green: #38ae48;
+$orange: #ffa500;
+
+$shadow-inset: 0 1px 3px 1px rgba($accent-dark, 0.3);
+
+$desktop: 1920px;
+$desktop-small: 1200px;
+$vertical: 1440px;
+$tablet: 1024px;
+$mobile: 600px;
+
+@mixin border_grey {
+    border: 1px solid $grey-lighter;
+}
+
+@mixin bg_blur {
+    background-color: rgba(var(--bg-blur-alt), 0.95);
+    @supports (backdrop-filter: blur(4px)) {
+        background-color: rgba(var(--bg-blur-alt), 0.75);
+        backdrop-filter: blur(4px);
+    }
+}
+
+@mixin font-mono {
+    font-family: "Fira Code", monospace;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin plain {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    padding: 0;
+}
+
+@mixin text-overflow-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}

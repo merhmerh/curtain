@@ -1,0 +1,23 @@
+{
+	"appId": "com.curtain.app",
+	"productName": "Curtain",
+	"directories": {
+		"output": "dist"
+	},
+	"files": [
+		"src/electron.cjs",
+		"src/preload.cjs",
+		"src/server/**",
+		{
+			"from": "build",
+			"to": ""
+		}
+	],
+	"win": {
+		"artifactName": "curtain.${ext}",
+		"target": [
+			"nsis"
+		],
+		"icon": "build/icon.ico"
+	}
+}
