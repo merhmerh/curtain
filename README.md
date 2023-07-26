@@ -1,4 +1,4 @@
-# ![Logo](./.github/images/icon-46.svg) Curtain
+# ![Logo](./.github/images/icon-32.svg) Curtain
 
 #### A desktop overlay app
 
@@ -26,7 +26,7 @@ Download and install from latest release on GitHub.
 
 Launch the Curtain application on your desktop.
 
-#### To show the overlay
+#### Toggle overlay
 
 use keyboard shortcut `ctrl` `shift` `D`
 
