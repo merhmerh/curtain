@@ -1,4 +1,4 @@
-# Curtain
+# ![Logo](./.github/images/icon-32.svg) Curtain
 
 #### A desktop overlay app
 
@@ -15,6 +15,10 @@ Curtain is a versatile desktop overlay application that enhances your productivi
 -   Notes: Compose and manage notes using a user-friendly markdown-based note editor.
 
 -   Utilities: Access a range of utilities, including a timer, calendar, and more, all within Curtain.
+
+## Screenshot
+
+![screenshot](./.github/images/Screenshot_01.png)
 
 ## How to Use
 
@@ -51,3 +55,7 @@ npm run devmon
 ```bash
 npm run build
 ```
+
+## License
+
+Curtain is released under the MIT License. Feel free to use, modify, and distribute the app following the terms of the license.

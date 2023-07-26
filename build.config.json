@@ -18,6 +18,9 @@
 		"target": [
 			"nsis"
 		],
+		"publish": [
+			"github"
+		],
 		"icon": "build/icon.ico"
 	}
 }
