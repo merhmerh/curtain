@@ -6,3 +6,6 @@ dist
 .env.*
 !.env.example
 vite.config.js.timestamp-*
+.note.md
+.vscode
+.todo.todo

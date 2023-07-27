@@ -3,15 +3,20 @@ const contextMenu = require('electron-context-menu');
 const path = require('path');
 const fs = require('fs')
 const serve = require("electron-serve");
+const { autoUpdater } = require("electron-updater")
 // const ws = require("electron-window-state");
 require('dotenv').config();
 const serveURL = serve({ directory: "." });
 
 const port = process.env.PORT || 3000;
 const isDev = !app.isPackaged || (process.env.NODE_ENV == "development");
-let mainWindow;
-
 console.log('isDev:', process.env.NODE_ENV);
+
+let mainWindow;
+autoUpdater.autoDownload = true;
+autoUpdater.autoRunAppAfterInstall = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
 
 function loadVite(port) {
     mainWindow.loadURL(`http://localhost:${port}`).catch(() => {
@@ -36,6 +41,7 @@ function createWindow() {
         resizable: false,
         transparent: true,
         frame: false,
+        skipTaskbar: true,
         webPreferences: {
             webSecurity: true,
             nodeIntegration: true,
@@ -140,6 +146,30 @@ app.whenReady().then(() => {
             mainWindow.show()
         }
     })
+
+    //autoUpdater
+    autoUpdater.checkForUpdates()
+    autoUpdater.on('update-available', (info) => {
+        console.log(info);
+        mainWindow.webContents.send('updateAvailable', info)
+    });
+
+    ipcMain.handle('downloadUpdate', () => {
+        autoUpdater.downloadUpdate();
+        return ('downloading update')
+    })
+
+    autoUpdater.on('update-downloaded', (info) => {
+        const updateVersion = info.version;
+        console.log('Update downloaded:', updateVersion);
+        mainWindow.webContents.send('updateDownloaded', info)
+        // autoUpdater.quitAndInstall();
+    });
+
+    autoUpdater.on('error', (error) => {
+        console.error('Update check failed:', error);
+        mainWindow.webContents.send('updateError', error)
+    });
 
 })
 

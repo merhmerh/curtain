@@ -15,6 +15,18 @@ onMount(async () => {
         document.activeElement.blur();
         $isEditMode = false;
     });
+
+    ipc.receive('updateAvailable', (e) => {
+        console.log('update available', e);
+    });
+
+    ipc.receive('updateError', (e) => {
+        console.log('update error', e);
+    });
+
+    ipc.receive('updateDownloaded', (e) => {
+        console.log('update downloaded', e);
+    });
 });
 
 async function getConfig() {
