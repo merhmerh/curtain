@@ -105,6 +105,7 @@ function checkTimer() {
 }
 
 async function reset() {
+    if (!timer.original) return;
     timer.min = leftPad(Math.floor(timer.original / 60));
     timer.sec = leftPad(timer.original % 60);
     timer.remaining = timer.original;
@@ -208,6 +209,7 @@ async function reset() {
                     class="none"
                     class:disabled={!canStartTimer}
                     on:click={() => {
+                        if (!canStartTimer) return;
                         if (timer.ongoing) {
                             timerResume();
                         } else {
@@ -217,7 +219,12 @@ async function reset() {
                     <Icon icon="solar:play-bold" width="24" />
                 </button>
             {/if}
-            <button class="none" on:click={reset}><Icon icon="jam:refresh" width="24" /></button>
+            <button
+                class="none"
+                class:disabled={!canStartTimer}
+                on:click={() => {
+                    reset();
+                }}><Icon icon="jam:refresh" width="24" /></button>
         </div>
     </div>
 </div>

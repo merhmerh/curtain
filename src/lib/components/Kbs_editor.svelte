@@ -15,19 +15,19 @@ export let mode = 'add';
 function save() {
     let error = 0;
 
-    Object.entries(data).forEach(([key, value]) => {
-        if (!value) error++;
-    });
-
-    if (error) {
-        console.log('missing field');
-        return;
+    if (!data.value || !data.description) {
+        return console.log('value and description cannot be empty');
     }
 
     if (!Array.isArray(data.keys)) {
-        console.log(data.keys);
-        data.keys = data.keys.split(',');
+        if (!data.keys) {
+            data.keys = [];
+        } else {
+            data.keys = data.keys.split(',');
+        }
     }
+    console.log(data);
+
     dispatch('save', data);
 }
 

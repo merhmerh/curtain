@@ -1,6 +1,6 @@
 <script>
 import Icon from '@iconify/svelte';
-import { isEditMode, config } from '$routes/app.store';
+import { isEditMode, config, session } from '$routes/app.store';
 import { saveConfig } from '$fn/helper';
 
 const columnMax = 5,

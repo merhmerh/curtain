@@ -14,7 +14,7 @@
 		}
 	],
 	"win": {
-		"artifactName": "curtain.${ext}",
+		"artifactName": "curtain_${version}.${ext}",
 		"target": [
 			"nsis"
 		],

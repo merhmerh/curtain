@@ -85,6 +85,7 @@ function resetEntry() {
                             <div class="description">
                                 {row.description}
                             </div>
+
                             <div class="keys">
                                 {#each row.keys as key}
                                     <div class="key">

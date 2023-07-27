@@ -13,10 +13,15 @@ const isDev = !app.isPackaged || (process.env.NODE_ENV == "development");
 console.log('isDev:', process.env.NODE_ENV);
 
 let mainWindow;
+let isUpdateHandlerRegistered = false
 autoUpdater.autoDownload = true;
 autoUpdater.autoRunAppAfterInstall = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
+app.setLoginItemSettings({
+    openAtLogin: true,
+    openAsHidden: false,
+});
 
 function loadVite(port) {
     mainWindow.loadURL(`http://localhost:${port}`).catch(() => {
@@ -80,7 +85,7 @@ async function createMainWindow() {
     });
 
     if (isDev) {
-        // mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
     }
 
     if (isDev) loadVite(port);
@@ -119,7 +124,7 @@ app.whenReady().then(() => {
                 },
                 {
                     label: 'Refresh',
-                    accelerator: 'CmdOrCtrl+Alt+R',
+                    accelerator: 'CmdOrCtrl+R',
                     click: (menuItem, browserWindow, event) => {
                         browserWindow.reload(); // This line will refresh the current window.
                     },
@@ -146,31 +151,6 @@ app.whenReady().then(() => {
             mainWindow.show()
         }
     })
-
-    //autoUpdater
-    autoUpdater.checkForUpdates()
-    autoUpdater.on('update-available', (info) => {
-        console.log(info);
-        mainWindow.webContents.send('updateAvailable', info)
-    });
-
-    ipcMain.handle('downloadUpdate', () => {
-        autoUpdater.downloadUpdate();
-        return ('downloading update')
-    })
-
-    autoUpdater.on('update-downloaded', (info) => {
-        const updateVersion = info.version;
-        console.log('Update downloaded:', updateVersion);
-        mainWindow.webContents.send('updateDownloaded', info)
-        // autoUpdater.quitAndInstall();
-    });
-
-    autoUpdater.on('error', (error) => {
-        console.error('Update check failed:', error);
-        mainWindow.webContents.send('updateError', error)
-    });
-
 })
 
 const gotSingleLock = app.requestSingleInstanceLock();
@@ -296,8 +276,8 @@ function mainProcessEventListener() {
         const configPath = getConfigPath();
 
         await ensureAppPathExists();
+        checkUpdate()
         return getConfigFile(configPath);
-
         async function getConfigFile(path) {
             let cfg;
             try {
@@ -360,4 +340,39 @@ function mainWindowEventListener() {
         return { action: 'deny' };
     });
 
+}
+
+
+function checkUpdate() {
+    console.log('?');
+    mainWindow.webContents.send('info', { version: app.getVersion(), isDev: isDev })
+
+
+    autoUpdater.checkForUpdates()
+    if (!isUpdateHandlerRegistered) {
+        autoUpdater.on('update-available', (info) => {
+            mainWindow.webContents.send('updateAvailable', info.version)
+        });
+
+        // autoUpdater.downloadUpdate();
+
+        ipcMain.on('restartApp', (e) => {
+            autoUpdater.quitAndInstall();
+        })
+
+        autoUpdater.on('update-downloaded', (info) => {
+            mainWindow.webContents.send('updateDownloaded', info)
+        });
+
+        autoUpdater.on('error', (error) => {
+            mainWindow.webContents.send('updateError', error)
+        });
+
+        autoUpdater.on('update-not-available', (info) => {
+            info.message = 'no updates'
+            mainWindow.webContents.send('info', info)
+        });
+
+        isUpdateHandlerRegistered = true
+    }
 }
