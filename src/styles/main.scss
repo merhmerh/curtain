@@ -2,7 +2,7 @@
 
 :root {
     // --main: #dadde6;
-    --main: #8c8f96;
+    --main: #a4a7ae;
     --main-alt: #dcdfed;
     --main-light: #9d9da3;
     --bg-rgb: 28, 30, 34;
@@ -14,8 +14,17 @@
     --bg-blur: 35, 39, 46;
     --bg-blur-alt: 35, 39, 46;
 
-    --accent: #4692d1;
+    --main-100: #eef2f9;
+    --main-200: #d5d8e0;
+    --main-300: #bcbfc7;
+    --main-400: #a4a7ae;
+    --main-500: #808693;
+    --main-600: #696f7c;
+    --main-700: #535965;
+    --main-800: #3f4450;
+    --main-900: #2b303b;
 
+    --accent: #4692d1;
     --accent-50: #ebf3fa;
     --accent-100: #dae9f6;
     --accent-200: #b5d4ed;
@@ -111,6 +120,7 @@ button {
     }
 
     &:focus-visible {
+        // outline: 2px solid transparent !important;
         outline: 2px solid $main !important;
     }
 
@@ -312,6 +322,12 @@ textarea {
 
 ::-webkit-scrollbar-corner {
     background-color: transparent;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .md {

@@ -10,18 +10,20 @@ const serveURL = serve({ directory: "." });
 
 const port = process.env.PORT || 3000;
 const isDev = !app.isPackaged || (process.env.NODE_ENV == "development");
-console.log('isDev:', process.env.NODE_ENV);
+let blockGlobalShortcut = false;
+let overlayShortcut = 'Shift+CommandOrControl+D'
+
+if (!isDev) {
+    app.setLoginItemSettings({
+        openAtLogin: true
+    })
+}
 
 let mainWindow;
 let isUpdateHandlerRegistered = false
 autoUpdater.autoDownload = true;
 autoUpdater.autoRunAppAfterInstall = true;
 autoUpdater.autoInstallOnAppQuit = true;
-
-app.setLoginItemSettings({
-    openAtLogin: true,
-    openAsHidden: false,
-});
 
 function loadVite(port) {
     mainWindow.loadURL(`http://localhost:${port}`).catch(() => {
@@ -143,6 +145,7 @@ app.whenReady().then(() => {
     Menu.setApplicationMenu(menu)
 
     globalShortcut.register('Shift+CommandOrControl+D', () => {
+        if (blockGlobalShortcut) return
         const isVisible = mainWindow.isVisible()
         if (isVisible) {
             mainWindow.webContents.send('minimize')
@@ -301,7 +304,6 @@ function mainProcessEventListener() {
     });
 
 
-
     ipcMain.on('openPath', (e, filePath) => {
         console.log(filePath);
         try {
@@ -317,6 +319,47 @@ function mainProcessEventListener() {
         console.log(clipboard.readHTML())
     })
 
+    ipcMain.on('blockGlobalShortcut', (e, bool) => {
+        if (bool == undefined) {
+            bool = true
+        }
+        blockGlobalShortcut = bool
+        if (bool) {//true
+            deregister()
+        } else {//false
+            registerEverything()
+        }
+    })
+
+    ipcMain.on('registerOverlayShortcut', (e, keys) => {
+        registerOverlayShortcut(keys)
+    })
+}
+
+function deregister() {
+    // globalShortcut.unregister('')
+    globalShortcut.unregisterAll();
+}
+
+function registerEverything() {
+    registerOverlayShortcut(overlayShortcut)
+}
+
+function registerOverlayShortcut(keys) {
+    blockGlobalShortcut = false
+    overlayShortcut = keys
+    console.log('overlay:', overlayShortcut);
+    globalShortcut.register(overlayShortcut, () => {
+        console.log('o', blockGlobalShortcut);
+        if (blockGlobalShortcut) return
+        const isVisible = mainWindow.isVisible()
+        if (isVisible) {
+            mainWindow.webContents.send('minimize')
+            mainWindow.hide()
+        } else {
+            mainWindow.show()
+        }
+    })
 }
 
 function mainWindowEventListener() {

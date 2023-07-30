@@ -140,7 +140,7 @@ function scrollLineNumber(t) {
 
 <svelte:window on:keydown={handleKeydown} />
 
-<Modal transition={0}>
+<Modal transition={0} on:close={close} closeButton={false}>
     <div class="container">
         <div class="header">
             <div class="title">

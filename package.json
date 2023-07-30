@@ -16,7 +16,7 @@
         "electron": "concurrently --kill-others -n=svelte,electron -c=red,blue \"vite dev\" \"electron src/electron.cjs\"",
         "build:electron": "electron-builder -w --config build.config.json",
         "build": "cross-env NODE_ENV=production npm run build:svelte && npm run build:electron",
-        "publish": "electron-builder -w --config build.config.json --publish always"
+        "publish": "cross-env NODE_ENV=production npm run build:svelte && electron-builder -w --config build.config.json --publish always"
     },
     "devDependencies": {
         "@iconify/svelte": "^3.1.4",
@@ -26,7 +26,7 @@
         "concurrently": "^8.2.0",
         "cross-env": "^7.0.3",
         "dayjs": "^1.11.9",
-        "electron": "^25.3.0",
+        "electron": "^25.3.2",
         "electron-builder": "^24.4.0",
         "electronmon": "^2.0.2",
         "highlight.js": "^11.8.0",

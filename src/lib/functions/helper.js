@@ -22,6 +22,15 @@ export function timeout(ms) {
 }
 
 
+function leftPad(str, len) {
+    if (typeof str !== 'string') {
+        throw new TypeError('Input must be a string.');
+    }
+
+    return str.slice(0, len);
+}
+
+
 export function isURL(str) {
     // Regular expression pattern for URL validation
     const urlPattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/;
