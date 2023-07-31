@@ -16,9 +16,15 @@ Curtain is a versatile desktop overlay application that enhances your productivi
 
 -   Utilities: Access a range of utilities, including a timer, calendar, and more, all within Curtain.
 
+-   More modules coming soon...
+
 ## Screenshot
 
 ![screenshot](./.github/images/Screenshot_01.png)
+
+<img src="./.github/images/settings.png" width=50% height=50%>
+
+Customize to your liking
 
 ## How to Use
 
@@ -28,13 +34,17 @@ Launch the Curtain application on your desktop.
 
 #### Toggle overlay
 
-use keyboard shortcut `ctrl` `shift` `D`
+use keyboard shortcut default: `ctrl` `shift` `D`
 
 #### To customize the columns and modules:
 
-Go to edit mode using `ctrl` `E` or click on edit icon at top right.
+Go to settings `ctrl` `p` or click on the gear icon at top right of the screen.
 
-Select the number of columns to be shown.
+Select appearance in the settings menu on the left.
+
+Set number of column to be displayed.
+
+Close settings, then enter edit mode `ctrl` `E` or click on pencil icon at top left of the screen.
 
 In each column choose the modules in the dropdown.
 
