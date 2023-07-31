@@ -29,8 +29,8 @@ onMount(async () => {
         console.log("update available", v);
         downloadedVersion = v;
 
-        await timeout(500);
-        updateAppModal = true;
+        // await timeout(500);
+        // updateAppModal = true;
     });
 
     ipc.receive("updateError", (e) => {
@@ -38,7 +38,7 @@ onMount(async () => {
     });
 
     ipc.receive("updateDownloaded", (e) => {
-        console.log("update downloaded", e);
+        updateAppModal = true;
     });
 
     await getConfig();
