@@ -1,20 +1,22 @@
 <script>
-import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-import Icon from '@iconify/svelte';
-import { fly } from 'svelte/transition';
+import { createEventDispatcher, onDestroy, onMount } from "svelte";
+import Icon from "@iconify/svelte";
+import { fly } from "svelte/transition";
+import { session } from "$routes/app.store";
 let modal;
-export let closePosition = 'relative';
+export let closePosition = "relative";
 export let transition = true;
-export let modalPosition = 'center';
+export let modalPosition = "center";
 export let closeButton = true;
 export let escape = true;
 export let exitOutside = true;
+export let background = true;
 const dispatch = createEventDispatcher();
 
 let transitionDuration = transition ? 300 : transition;
 
 export function close() {
-    dispatch('close');
+    dispatch("close");
 }
 
 function clickOutside() {
@@ -25,25 +27,26 @@ function clickOutside() {
 }
 
 onMount(() => {
-    document.body.style.overflowY = 'hidden';
+    document.body.style.overflowY = "hidden";
+    $session.modal = true;
 });
 
 onDestroy(() => {
-    document.body.style.overflowY = 'auto';
+    document.body.style.overflowY = "auto";
 });
 
 const handle_keydown = (e) => {
     if (!escape) {
         return;
     }
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
         close();
         return;
     }
 
-    if (e.key === 'Tab') {
+    if (e.key === "Tab") {
         // trap focus
-        const nodes = modal.querySelectorAll('*');
+        const nodes = modal.querySelectorAll("*");
         const tabbable = Array.from(nodes).filter((n) => n.tabIndex >= 0);
 
         let index = tabbable.indexOf(document.activeElement);
@@ -68,11 +71,15 @@ function closeFromChild() {
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
     class="modal-background"
+    class:noBackground={!background}
     transition:fly={{ duration: transitionDuration }}
+    on:outrostart={() => {
+        $session.modal = false;
+    }}
     on:click|self={clickOutside}
     bind:this={modal}>
     {#if closeButton}
-        {#if closePosition == 'absolute'}.
+        {#if closePosition == "absolute"}.
             <button class="modal_close plain topright" on:click={close}>
                 <Icon icon="material-symbols:close" width="42" inline={true} />
             </button>
@@ -80,7 +87,7 @@ function closeFromChild() {
     {/if}
     <div class="modal" modal_position={modalPosition} role="dialog" aria-modal="true">
         {#if closeButton}
-            {#if closePosition == 'relative'}
+            {#if closePosition == "relative"}
                 <button class="modal_close plain" on:click={close}>
                     <Icon icon="material-symbols:close" width="24" inline={true} />
                 </button>
@@ -129,6 +136,10 @@ function closeFromChild() {
     justify-content: center;
     align-items: center;
     z-index: 100;
+    &.noBackground {
+        background-color: transparent !important;
+        backdrop-filter: none;
+    }
 }
 
 .modal {
@@ -146,7 +157,7 @@ function closeFromChild() {
         max-width: calc(100vw - 3rem);
     }
 
-    &[modal_position='top'] {
+    &[modal_position="top"] {
         top: 5rem;
     }
 }

@@ -1,9 +1,9 @@
 <script>
-import ShortcutEditor from './Shortcut_editor.svelte';
-import { isEditMode, config } from '$routes/app.store';
-import { saveConfig } from '$fn/helper';
+import ShortcutEditor from "./Shortcut_editor.svelte";
+import { isEditMode, config } from "$routes/app.store";
+import { saveConfig } from "$fn/helper";
 
-import Icon from '@iconify/svelte';
+import Icon from "@iconify/svelte";
 
 const ipc = window.ipc;
 let newEditor = false;
@@ -50,8 +50,8 @@ function save() {
 }
 
 function openFile(sc) {
-    ipc.send('openPath', sc.filePath);
-    ipc.send('hide');
+    ipc.send("openPath", sc.filePath);
+    ipc.send("hide");
 }
 </script>
 
@@ -68,19 +68,19 @@ function openFile(sc) {
                     }}>
                     {#if !sc.edit}
                         <div class="scIcon">
-                            {#if sc.type == 'folder'}
+                            {#if sc.type == "folder"}
                                 <Icon icon="flat-color-icons:folder" width="48" />
-                            {:else if sc.type == 'url'}
+                            {:else if sc.type == "url"}
                                 <Icon icon="flat-color-icons:globe" width="48" />
-                            {:else if sc.type == 'ppt'}
+                            {:else if sc.type == "ppt"}
                                 <Icon icon="vscode-icons:file-type-powerpoint" width="48" />
-                            {:else if sc.type == 'xls'}
+                            {:else if sc.type == "xls"}
                                 <Icon icon="vscode-icons:file-type-excel" width="48" />
-                            {:else if sc.type == 'pdf'}
+                            {:else if sc.type == "pdf"}
                                 <Icon icon="vscode-icons:file-type-pdf2" width="48" />
-                            {:else if sc.type == 'txt'}
+                            {:else if sc.type == "txt"}
                                 <Icon icon="flat-color-icons:document" width="48" />
-                            {:else if sc.type == 'app'}
+                            {:else if sc.type == "app"}
                                 <Icon icon="cib:atom" width="42" />
                             {/if}
                         </div>
@@ -183,7 +183,7 @@ function openFile(sc) {
         .scIcon {
             width: 3rem;
             height: 3rem;
-            color: $accent;
+            color: var(--accent-500);
             @include flex-center;
         }
         .actions {

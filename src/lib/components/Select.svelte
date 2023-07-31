@@ -1,16 +1,16 @@
 <script>
-import { createEventDispatcher, onMount, tick } from 'svelte';
-import Icon from '@iconify/svelte';
+import { createEventDispatcher, onMount, tick } from "svelte";
+import Icon from "@iconify/svelte";
 let open = false;
 export let firstItem = 0;
 export let items;
 export let border = false;
 export let searchable = false;
 export let maxHeight = 220;
-export let placeholder = '';
+export let placeholder = "";
 let foundSearch = true;
 let input;
-export let error = '';
+export let error = "";
 const dispatch = createEventDispatcher();
 
 const arrItems = (() => {
@@ -20,7 +20,7 @@ const arrItems = (() => {
 
     const arr = [];
     items.forEach((item) => {
-        if (typeof item !== 'object') {
+        if (typeof item !== "object") {
             return arr.push({
                 value: item,
                 label: item,
@@ -36,7 +36,7 @@ const arrItems = (() => {
 export let selected = placeholder ? null : arrItems[firstItem];
 
 function clickOutside(element, callback) {
-    document.body.addEventListener('click', onClick);
+    document.body.addEventListener("click", onClick);
 
     function onClick(event) {
         if (!element.contains(event.target) && open) {
@@ -50,7 +50,7 @@ export function change(item) {
     // placeholder = null;
     selected = { ...item };
     open = false;
-    dispatch('change', selected);
+    dispatch("change", selected);
 }
 
 async function toggleDropdown() {
@@ -70,7 +70,7 @@ function filter(string) {
     let matches = 0;
     arrItems.forEach((item, index) => {
         const label = item.label.toString();
-        const match = label.match(new RegExp(string, 'i'));
+        const match = label.match(new RegExp(string, "i"));
         if (!match) {
             return (arrItems[index].match = false);
         }
@@ -98,9 +98,11 @@ export function getValue() {
     }
     return selected.value;
 }
+
 export function setError() {
     error = true;
 }
+
 export function reset() {
     selected = null;
 }
@@ -115,7 +117,7 @@ export function reset() {
             class:error
             class:placeholder={selected == null}
             class:focus={open == true}
-            data-value={selected ? selected.value : ''}
+            data-value={selected ? selected.value : ""}
             on:click={toggleDropdown}>
             {#if selected == null}
                 {placeholder}
@@ -166,6 +168,7 @@ export function reset() {
 <style lang="scss">
 .select_container {
     height: 100%;
+    height: fit-content;
     // max-height: 48px;
     position: relative;
 }
@@ -184,7 +187,7 @@ export function reset() {
         color: $main-light;
     }
     &.focus {
-        border-color: $accent;
+        border-color: var(--accent-500);
     }
 
     .expand {
@@ -209,7 +212,7 @@ export function reset() {
     display: flex;
     flex-direction: column;
     z-index: 200;
-    box-shadow: 0 2px 4px rgba(125, 125, 125, 0.12);
+    // box-shadow: 0 2px 4px rgba(125, 125, 125, 0.12);
     max-height: 220px;
     overflow: hidden;
 
@@ -218,6 +221,7 @@ export function reset() {
         border-radius: 0;
         border-bottom: 1px solid $grey-lighter;
         font-style: inherit;
+        padding-block: 0.75rem;
         &:focus {
             outline: none;
             background-color: inherit;
@@ -230,6 +234,8 @@ export function reset() {
     .items_container {
         height: auto;
         overflow-y: auto;
+        padding-block: 0.25rem;
+
         .item {
             padding: 0.5rem;
             cursor: pointer;

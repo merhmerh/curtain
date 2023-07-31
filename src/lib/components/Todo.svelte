@@ -1,7 +1,7 @@
 <script>
-import Icon from '@iconify/svelte';
-import { isEditMode, config } from '$routes/app.store';
-import { saveConfig } from '$fn/helper';
+import Icon from "@iconify/svelte";
+import { isEditMode, config } from "$routes/app.store";
+import { saveConfig } from "$fn/helper";
 
 let newTaskString;
 let recycleBinOpen,
@@ -14,7 +14,7 @@ function addEntry() {
     }
     $config.todos.push({ task: newTaskString, done: false });
     $config = $config;
-    newTaskString = '';
+    newTaskString = "";
     save();
 }
 
@@ -64,7 +64,7 @@ function removeFromRecycleBin(index) {
             bind:value={newTaskString}
             placeholder="Enter new task"
             on:keydown={(e) => {
-                if (e.key == 'Enter') {
+                if (e.key == "Enter") {
                     addEntry();
                 }
             }} />
@@ -103,7 +103,7 @@ function removeFromRecycleBin(index) {
                             type="text"
                             bind:value={todo.task}
                             on:keydown={(e) => {
-                                if (e.key == 'Enter') {
+                                if (e.key == "Enter") {
                                     saveConfig();
                                     todo.edit = false;
                                 }
@@ -238,7 +238,7 @@ function removeFromRecycleBin(index) {
 
             &.done {
                 .check {
-                    color: $accent;
+                    color: var(--accent-500);
                 }
                 span {
                     text-decoration: line-through;

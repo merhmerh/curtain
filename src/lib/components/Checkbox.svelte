@@ -7,8 +7,8 @@ function generateID(length) {
     if (!length) {
         length = 8;
     }
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let id = '';
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "";
 
     for (let i = 0; i < length; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
@@ -85,17 +85,17 @@ button.checkbox {
     // background-color: $bg-s;
     border-radius: 0.25rem;
 
-    &[checked='true'] {
+    &[checked="true"] {
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 2px;
-        border-color: $accent;
+        border-color: var(--accent-500);
 
         &:after {
-            content: '';
+            content: "";
             border-radius: 2px;
-            background-color: $accent;
+            background-color: var(--accent-500);
             width: 100%;
             height: 100%;
         }

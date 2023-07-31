@@ -1,14 +1,15 @@
 <script>
-import Icon from '@iconify/svelte';
-import { isEditMode, config } from '$routes/app.store';
-import KbsEditor from './Kbs_editor.svelte';
-import { saveConfig } from '$fn/helper';
+import Icon from "@iconify/svelte";
+import { isEditMode, config } from "$routes/app.store";
+import KbsEditor from "./Kbs_editor.svelte";
+import { saveConfig } from "$fn/helper";
+import { notify } from "$comp/Notify/notify.store";
 
 let newEditor;
 let entry = {
-    value: '',
-    description: '',
-    keys: '',
+    value: "",
+    description: "",
+    keys: "",
 };
 
 function copy(value) {
@@ -48,9 +49,9 @@ function removeEntry(index) {
 
 function resetEntry() {
     entry = {
-        value: '',
-        description: '',
-        keys: '',
+        value: "",
+        description: "",
+        keys: "",
     };
 }
 </script>
@@ -78,6 +79,11 @@ function resetEntry() {
                             <button
                                 class="none value"
                                 on:click={() => {
+                                    notify.add("Copied to clipboard", {
+                                        align: "center",
+                                        duration: 3000,
+                                        type: "copy",
+                                    });
                                     copy(row.value);
                                 }}>
                                 <span>{row.value}</span>
@@ -199,7 +205,7 @@ function resetEntry() {
                         width: 100%;
                         height: 100%;
                         // content: '';
-                        background-color: $accent;
+                        background-color: var(--accent-500);
                     }
                 }
             }

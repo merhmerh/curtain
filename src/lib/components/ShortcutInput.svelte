@@ -4,10 +4,14 @@ import { createEventDispatcher } from 'svelte';
 
 const dispatch = createEventDispatcher();
 
+export let input;
+let original = input;
 let inputBox;
-let input = {};
+let listening;
+let placeholder;
 
 function listenToInput(e) {
+    placeholder = false;
     dispatch('listening');
 
     input = {};
@@ -17,6 +21,7 @@ function listenToInput(e) {
     input.shiftKey = e.shiftKey;
     const ignore = ['Control', 'Alt', 'Shift', 'Meta'];
     input.key = getKey(e.key);
+    original = input;
     function getKey(k) {
         if (ignore.includes(k)) {
             return '';
@@ -29,10 +34,22 @@ function listenToInput(e) {
 }
 
 function release() {
+    placeholder = false;
+    console.log(placeholder);
     inputBox.blur();
     dispatch('release', input);
 }
 </script>
+
+<svelte:window
+    on:click={(e) => {
+        if (!listening) return;
+        if (e.target !== inputBox) {
+            listening = false;
+            placeholder = false;
+            input = original;
+        }
+    }} />
 
 <div class="div">
     <button
@@ -41,12 +58,17 @@ function release() {
             e.target.value = '';
         }}
         on:click={() => {
+            listening = true;
             input = {};
+            placeholder = true;
         }}
         on:keydown={listenToInput}
         on:keyup={release}>
+        {#if placeholder}
+            <div class="placeholder">Press a combination of keys to change this shortcut</div>
+        {/if}
+
         <div class="keys">
-            <!--  -->
             {#if input.metaKey}
                 <div class="key">
                     <Icon icon="simple-icons:windows" />
@@ -113,7 +135,12 @@ button {
             text-transform: capitalize;
         }
     }
+    .placeholder {
+        padding-inline: 0.5rem;
+        font-size: 0.875rem;
+    }
     .icon {
+        pointer-events: none;
         margin-left: auto;
         background-color: var(--main-900);
         display: flex;

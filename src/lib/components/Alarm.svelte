@@ -1,6 +1,6 @@
 <script>
-import { timeout } from '$fn/helper';
-import Icon from '@iconify/svelte';
+import { timeout } from "$fn/helper";
+import Icon from "@iconify/svelte";
 
 let hand, clockFace, alarm, alarmRinging, canStartTimer;
 let handRotation = 0;
@@ -11,14 +11,14 @@ let diameter = radius * 2;
 let length = Math.PI * 2 * radius;
 let offset = -length - length * 1;
 
-let timer = { min: '', sec: '' },
+let timer = { min: "", sec: "" },
     timerRunning,
     timerSelector;
 
 checkTimer();
 
 function timerStart() {
-    console.log(timer, 'timer start');
+    console.log(timer, "timer start");
     timerRunning = true;
     timer.original = parseFloat(timer.min) * 60 || 0 + parseFloat(timer.sec) || 0;
     timer.ongoing = true;
@@ -32,7 +32,7 @@ function timerStart() {
 }
 
 function timerResume() {
-    console.log('resume');
+    console.log("resume");
     timerRunning = true;
     timer.before = new Date().getTime();
     timer.fromResume = true;
@@ -66,13 +66,13 @@ async function elapseTime() {
 }
 
 function timerPause() {
-    console.log('pause', timer);
+    console.log("pause", timer);
     timerRunning = false;
 }
 
 function leftPad(val) {
     val = val.toString();
-    return val.padStart(2, '0');
+    return val.padStart(2, "0");
 }
 
 async function timerEnd() {
@@ -83,7 +83,7 @@ async function timerEnd() {
     alarm.play();
     alarmRinging = true;
     await timeout(100);
-    hand.style.transition = 'none';
+    hand.style.transition = "none";
     offset = -length - length * 1;
     handRotation = 0;
     await timeout(100);
@@ -241,7 +241,7 @@ async function reset() {
         width: 100%;
         aspect-ratio: 1;
         &:after {
-            content: '';
+            content: "";
             z-index: -1;
             position: absolute;
             left: 50%;
@@ -257,7 +257,7 @@ async function reset() {
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            stroke: $accent;
+            stroke: var(--accent-500);
             pointer-events: none;
         }
         .hand {
@@ -272,11 +272,11 @@ async function reset() {
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-                content: '';
+                content: "";
                 width: 1.5rem;
                 height: 1.5rem;
                 background-color: $bg-p;
-                border: 4px solid var(--accent);
+                border: 4px solid var(--accent-500);
                 border-radius: 100%;
             }
         }
@@ -366,7 +366,7 @@ async function reset() {
             justify-content: center;
             gap: 1rem;
             button {
-                color: $accent;
+                color: var(--accent-500);
                 &.disabled {
                     color: $grey-lighter;
                     cursor: default;

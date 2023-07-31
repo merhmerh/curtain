@@ -1,13 +1,13 @@
 <script>
-import Icon from '@iconify/svelte';
-import { isEditMode } from '$routes/app.store';
-import Settings from './Settings.svelte';
-import Modal from './Modal.svelte';
+import Icon from "@iconify/svelte";
+import { isEditMode } from "$routes/app.store";
+import Settings from "./Settings.svelte";
+import Modal from "./Modal.svelte";
 
-let settingsModal = true;
+let settingsModal;
 
 function close() {
-    ipc.send('hide');
+    ipc.send("hide");
 }
 
 function edit() {
@@ -20,8 +20,16 @@ function edit() {
 }
 </script>
 
+<svelte:window
+    on:keydown={(e) => {
+        if (e.code == "KeyP" && e.ctrlKey) {
+            settingsModal = !settingsModal;
+        }
+    }} />
+
 {#if settingsModal}
     <Modal
+        background={true}
         escape={false}
         exitOutside={false}
         on:close={() => {

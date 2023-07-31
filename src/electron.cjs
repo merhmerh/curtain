@@ -3,6 +3,7 @@ const contextMenu = require('electron-context-menu');
 const path = require('path');
 const fs = require('fs')
 const serve = require("electron-serve");
+const fontList = require('font-list')
 const { autoUpdater } = require("electron-updater")
 // const ws = require("electron-window-state");
 require('dotenv').config();
@@ -12,18 +13,27 @@ const port = process.env.PORT || 3000;
 const isDev = !app.isPackaged || (process.env.NODE_ENV == "development");
 let blockGlobalShortcut = false;
 let overlayShortcut = 'Shift+CommandOrControl+D'
-
-if (!isDev) {
-    app.setLoginItemSettings({
-        openAtLogin: true
-    })
-}
+let skipTaskbar = true
 
 let mainWindow;
 let isUpdateHandlerRegistered = false
 autoUpdater.autoDownload = true;
 autoUpdater.autoRunAppAfterInstall = true;
 autoUpdater.autoInstallOnAppQuit = true;
+initConfig()
+
+function initConfig() {
+    try {
+        const cfg = getConfigData()
+        if (cfg.settings.app.showOnTaskbar !== undefined) {
+            skipTaskbar = !cfg.settings.app.showOnTaskbar
+        }
+    } catch (e) {
+        // 
+    }
+    console.log('skipTaskBar', skipTaskbar);
+
+}
 
 function loadVite(port) {
     mainWindow.loadURL(`http://localhost:${port}`).catch(() => {
@@ -44,11 +54,10 @@ function createWindow() {
         height: height,
         titleBarStyle: 'hidden',
         // autoHideMenuBar: true,
-        backgroundColor: '#CC000000',
         resizable: false,
         transparent: true,
         frame: false,
-        skipTaskbar: true,
+        skipTaskbar: skipTaskbar,
         webPreferences: {
             webSecurity: true,
             nodeIntegration: true,
@@ -99,7 +108,7 @@ async function createMainWindow() {
 
 app.commandLine.appendSwitch('wm-window-animations-disabled');
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     mainWindow.minimize()
     const iconPath = path.join(app.getAppPath(), 'icon.ico');
     const tray = new Tray(iconPath)
@@ -144,16 +153,20 @@ app.whenReady().then(() => {
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu)
 
-    globalShortcut.register('Shift+CommandOrControl+D', () => {
-        if (blockGlobalShortcut) return
-        const isVisible = mainWindow.isVisible()
-        if (isVisible) {
-            mainWindow.webContents.send('minimize')
-            mainWindow.hide()
-        } else {
-            mainWindow.show()
+
+    try {
+        const cfg = getConfigData()
+        const getKbs = cfg.settings.app.kbs_overlay
+        if (getKbs) {
+            overlayShortcut = getKbs
         }
-    })
+    } catch (e) {
+        console.log("config doesn't exist, use default key ctrl+shift+d");
+    }
+
+    registerOverlayShortcut()
+    setRunOnStart()
+
 })
 
 const gotSingleLock = app.requestSingleInstanceLock();
@@ -242,13 +255,7 @@ function mainProcessEventListener() {
         shell.openExternal(url)
     })
 
-
-    function getConfigPath() {
-        const appData = app.getPath('userData');
-        const appPath = path.join(appData, 'app');
-        return path.join(appPath, isDev ? 'curtain.config.json' : 'config.json');
-    }
-
+    //ensure config folder exist otherwise create the folder
     async function ensureAppPathExists() {
         const appData = app.getPath('userData');
         const appPath = path.join(appData, 'app');
@@ -259,47 +266,22 @@ function mainProcessEventListener() {
         } catch (e) {
             if (e.code === 'ENOENT') {
                 await fs.promises.mkdir(appPath, { recursive: true });
-                console.log('make dir');
+                fs.writeFileSync(configPath, JSON.stringify({}))
+                console.log('make dir', configPath);
             } else {
                 console.log(e);
             }
         }
     }
 
-    async function saveConfig(path, config) {
-        try {
-            fs.writeFileSync(path, JSON.stringify(config, null, 2));
-            // console.log('Config saved');
-        } catch (error) {
-            console.log('config save error', error);
-        }
-    }
-
     ipcMain.handle('init', async () => {
-        const configPath = getConfigPath();
-
         await ensureAppPathExists();
         checkUpdate()
-        return getConfigFile(configPath);
-        async function getConfigFile(path) {
-            let cfg;
-            try {
-                const configData = fs.readFileSync(path, 'utf-8');
-                cfg = JSON.parse(configData);
-            } catch (e) {
-                cfg = {};
-                await saveConfig(path, cfg); // Create a new config file if it doesn't exist
-            }
-
-            return cfg;
-        }
+        return getConfigData();
     });
 
     ipcMain.handle('saveConfig', async (e, config) => {
-        const configPath = getConfigPath();
-
-        await ensureAppPathExists();
-        await saveConfig(configPath, config);
+        await saveConfig(config);
         return 'OK';
     });
 
@@ -333,7 +315,77 @@ function mainProcessEventListener() {
 
     ipcMain.on('registerOverlayShortcut', (e, keys) => {
         registerOverlayShortcut(keys)
+        const cfg = getConfigData()
+        addOrUpdateJSON(cfg, 'settings.app.kbs_overlay', keys)
+        saveConfig(cfg)
     })
+
+    ipcMain.on('relaunch', () => {
+        if (isDev) {
+            return console.log('unable to trigger restart in dev');
+        }
+        app.relaunch();
+        app.exit();
+    })
+
+    ipcMain.on("toggleRunOnStartup", () => {
+        setRunOnStart()
+    })
+
+    ipcMain.handle('getFonts', () => {
+        return new Promise(resolve => {
+            fontList.getFonts()
+                .then(fonts => {
+                    resolve(fonts)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+    })
+}
+
+function setRunOnStart() {
+    if (!isDev) return
+
+    let runOnStartUp = false
+    try {
+        const cfg = getConfigData()
+        runOnStartUp = cfg.settings?.app?.runOnStartUp ?? false
+    } catch (e) {
+        console.log('runOnStart Error:', e.message);
+    }
+
+    app.setLoginItemSettings({
+        openAtLogin: runOnStartUp
+    })
+}
+
+function getConfigData() {
+    try {
+        const configPath = getConfigPath();
+        const configData = fs.readFileSync(configPath, 'utf-8');
+        return JSON.parse(configData) || {};
+    } catch (error) {
+        // Handle errors, such as file not found or invalid JSON format
+        console.error('Error while reading or parsing the config file:', error.message);
+        return {};
+    }
+}
+
+async function saveConfig(cfg) {
+    const configPath = getConfigPath()
+    try {
+        fs.writeFileSync(configPath, JSON.stringify(cfg, null, 2));
+    } catch (error) {
+        console.log('config save error', error);
+    }
+}
+
+function getConfigPath() {
+    const appData = app.getPath('userData');
+    const appPath = path.join(appData, 'app');
+    return path.join(appPath, isDev ? 'curtain.config.json' : 'config.json');
 }
 
 function deregister() {
@@ -347,10 +399,10 @@ function registerEverything() {
 
 function registerOverlayShortcut(keys) {
     blockGlobalShortcut = false
-    overlayShortcut = keys
-    console.log('overlay:', overlayShortcut);
+    if (keys) {
+        overlayShortcut = keys
+    }
     globalShortcut.register(overlayShortcut, () => {
-        console.log('o', blockGlobalShortcut);
         if (blockGlobalShortcut) return
         const isVisible = mainWindow.isVisible()
         if (isVisible) {
@@ -387,9 +439,7 @@ function mainWindowEventListener() {
 
 
 function checkUpdate() {
-    console.log('?');
     mainWindow.webContents.send('info', { version: app.getVersion(), isDev: isDev })
-
 
     autoUpdater.checkForUpdates()
     if (!isUpdateHandlerRegistered) {
@@ -418,4 +468,36 @@ function checkUpdate() {
 
         isUpdateHandlerRegistered = true
     }
+}
+
+/**
+ * Recursively adds a property to a JSON object if it doesn't already exist.
+ * If the property path already exists, the value will be overridden with the provided defaultValue.
+ *
+ * @param {object} obj - The JSON object to which the property will be added.
+ * @param {string} propertyPath - The dot-separated path of the property to add.
+ * @param {*} defaultValue - The value to be assigned to the property if it doesn't exist or to override the existing value.
+ * @returns {void}
+ *
+ * @example
+ * const cfg = {};
+ * addOrUpdateJSON(cfg, 'settings.app.kbs_overlay', 'ctrl+k');
+ * console.log(cfg); // Output: { settings: { app: { kbs_overlay: 'ctrl+k' } } }
+ */
+function addOrUpdateJSON(obj, propertyPath, defaultValue) {
+    const json = structuredClone(obj);
+    const pathArr = propertyPath.split('.');
+    let currentObject = json;
+
+    for (const property of pathArr) {
+        if (!currentObject[property]) {
+            if (pathArr.indexOf(property) === pathArr.length - 1) {
+                currentObject[property] = defaultValue;
+            } else {
+                currentObject[property] = {};
+            }
+        }
+        currentObject = currentObject[property];
+    }
+    return json;
 }

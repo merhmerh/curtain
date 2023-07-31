@@ -47,8 +47,8 @@ $mobile: 600px;
 @mixin bg_blur {
     background-color: rgba(var(--bg-blur-alt), 0.95);
     @supports (backdrop-filter: blur(4px)) {
-        background-color: rgba(var(--bg-blur-alt), 0.75);
-        backdrop-filter: blur(4px);
+        background-color: rgba(var(--bg-blur-alt), 0.5);
+        // backdrop-filter: blur(4px);
     }
 }
 

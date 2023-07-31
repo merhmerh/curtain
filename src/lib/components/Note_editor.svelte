@@ -1,28 +1,22 @@
 <script>
-import Icon from '@iconify/svelte';
-import { config, markedIsInitialized } from '$routes/app.store';
-import { debounce, saveConfig } from '$fn/helper';
-import { createEventDispatcher, onMount, tick } from 'svelte';
-import { marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/atom-one-dark.css';
-import Modal from './Modal.svelte';
+import Icon from "@iconify/svelte";
+import { config, markedIsInitialized } from "$routes/app.store";
+import { debounce, saveConfig } from "$fn/helper";
+import { createEventDispatcher, onMount, tick } from "svelte";
+import { marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
+import "highlight.js/styles/atom-one-dark.css";
+import Modal from "./Modal.svelte";
 
 const dispatch = createEventDispatcher();
 
 if (!$markedIsInitialized) {
-    // const renderer = {
-    //     link(href, title, text) {
-    //         return `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
-    //     },
-    // };
-
     const highlighter = markedHighlight({
-        langPrefix: 'hljs language-',
+        langPrefix: "hljs language-",
         highlight(code, lang) {
             console.log(code);
-            const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+            const language = hljs.getLanguage(lang) ? lang : "plaintext";
             return hljs.highlight(code, { language }).value;
         },
     });
@@ -32,18 +26,31 @@ if (!$markedIsInitialized) {
     $markedIsInitialized = true;
 }
 export let index = 0;
-let preview = true,
+let preview = index == undefined ? false : true,
     totalLines,
+    inputTitle,
     currentLine,
-    showLineNumbers = getSettings(),
+    // showLineNumbers = getSettings(),
+    showLineNumbers = false,
     textarea,
-    html = '',
+    html = "",
     lineNumberContainer;
 let note = getNote();
 
 $: preview, onPreviewChange();
 
-function onPreviewChange() {
+async function onPreviewChange() {
+    await tick();
+    console.log(textarea);
+    if (textarea && inputTitle) {
+        if (!note.title) {
+            inputTitle.focus();
+        } else {
+            textarea.setSelectionRange(note.content.length, note.content.length);
+            textarea.focus();
+        }
+    }
+
     if (!preview) return;
     updateLineNumbers();
     parseMarkdown(note.content);
@@ -51,15 +58,15 @@ function onPreviewChange() {
 
 onMount(() => {
     console.log(index);
-    dispatch('open');
+    dispatch("open");
 });
 
 function parseMarkdown(md) {
     const h = marked.parse(md, { silent: true });
-    const d = document.createElement('div');
+    const d = document.createElement("div");
     d.innerHTML = h;
-    d.querySelectorAll('a').forEach((a) => {
-        a.setAttribute('target', '_blank');
+    d.querySelectorAll("a").forEach((a) => {
+        a.setAttribute("target", "_blank");
     });
     html = d.innerHTML;
 }
@@ -75,7 +82,7 @@ function getSettings() {
 
 function getNote() {
     if (!$config.note || index == null) {
-        return { title: '', content: '' };
+        return { title: "", content: "" };
     }
     return $config.note[index];
 }
@@ -106,31 +113,31 @@ async function save() {
 async function close() {
     $config = $config;
     save();
-    dispatch('close');
+    dispatch("close");
 }
 
 function remove() {
     $config.note.splice(index, 1);
     $config = $config;
     saveConfig();
-    dispatch('close');
+    dispatch("close");
 }
 
 async function handleKeydown(e) {
-    if (e.ctrlKey && e.code == 'KeyW') {
+    if (e.ctrlKey && e.code == "KeyW") {
         return close();
     }
 
-    if (e.ctrlKey && e.code == 'KeyE') {
+    if (e.ctrlKey && e.code == "KeyE") {
         preview = !preview;
     }
 }
 
 function updateLineNumbers() {
-    totalLines = note.content.split('\n').length;
-    console.log('totalLine', totalLines);
+    totalLines = note.content.split("\n").length;
+    console.log("totalLine", totalLines);
     if (!textarea) return;
-    currentLine = textarea.value.substr(0, textarea.selectionStart).split('\n').length;
+    currentLine = textarea.value.substr(0, textarea.selectionStart).split("\n").length;
 }
 
 function scrollLineNumber(t) {
@@ -140,15 +147,16 @@ function scrollLineNumber(t) {
 
 <svelte:window on:keydown={handleKeydown} />
 
-<Modal transition={0} on:close={close} closeButton={false}>
+<Modal transition={300} on:close={close} closeButton={false}>
     <div class="container">
         <div class="header">
             <div class="title">
-                <span>notes</span> / <span>{note.title ? note.title : 'My Note'}</span>
+                <span>notes</span> /
+                <span>{note.title ? note.title.replace(/\s/g, "_") : "MyNote"}.md</span>
             </div>
             <div class="actions">
                 {#if !preview}
-                    <button
+                    <!-- <button
                         class="none"
                         on:click={() => {
                             showLineNumbers = !showLineNumbers;
@@ -160,7 +168,7 @@ function scrollLineNumber(t) {
                         {:else}
                             <Icon icon="charm:menu-hamburger" height="24" />
                         {/if}
-                    </button>
+                    </button> -->
                 {/if}
 
                 <button
@@ -185,7 +193,7 @@ function scrollLineNumber(t) {
             </div>
         </div>
 
-        <div class="paper">
+        <div class="paper" class:editMode={!preview}>
             {#if preview}
                 <div class="viewer">
                     <div class="title">{note.title}</div>
@@ -196,6 +204,7 @@ function scrollLineNumber(t) {
             {:else}
                 <input
                     type="text"
+                    bind:this={inputTitle}
                     bind:value={note.title}
                     on:input={autoSave}
                     placeholder="Title" />
@@ -209,21 +218,24 @@ function scrollLineNumber(t) {
                     {/if}
                     <textarea
                         bind:this={textarea}
+                        on:load={() => {
+                            textarea = textarea;
+                        }}
                         bind:value={note.content}
                         on:input={autoSave}
                         on:input={updateLineNumbers}
                         on:keydown={async (e) => {
                             if (
-                                e.key == 'ArrowUp' ||
-                                e.key == 'ArrowDown' ||
-                                e.key == 'ArrowLeft' ||
-                                e.key == 'ArrowRight'
+                                e.key == "ArrowUp" ||
+                                e.key == "ArrowDown" ||
+                                e.key == "ArrowLeft" ||
+                                e.key == "ArrowRight"
                             ) {
                                 await tick();
                                 requestAnimationFrame(() => {
                                     currentLine = textarea.value
                                         .substr(0, textarea.selectionStart)
-                                        .split('\n').length;
+                                        .split("\n").length;
                                     console.log(currentLine);
                                 });
                             }
@@ -240,22 +252,14 @@ function scrollLineNumber(t) {
 </Modal>
 
 <style lang="scss">
-.modalbg {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    @include bg-blur;
-}
 .container {
     z-index: 101;
     width: auto;
     position: fixed;
     padding: 2rem;
     padding-top: 0.5rem;
-    background-color: $bg-s;
+    background-color: $bg-p;
+
     // background-color: red;
     // background-color: $bg-alt;
     border-radius: 1rem;
@@ -295,10 +299,15 @@ function scrollLineNumber(t) {
         background-color: $bg-p;
         height: 80vh;
         aspect-ratio: 0.7;
-        padding: 2rem;
+        padding: 1rem;
         border-radius: 0.5rem;
         user-select: auto !important;
+        border-left: 2px solid transparent;
 
+        &.editMode {
+            border-radius: 0;
+            border-left: 2px solid var(--accent-400);
+        }
         input {
             width: 100%;
             border: 0;

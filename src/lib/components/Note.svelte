@@ -1,7 +1,7 @@
 <script>
-import NoteEditor from './Note_editor.svelte';
-import { isEditMode, config, blockGlobalShortcut } from '$routes/app.store';
-import Icon from '@iconify/svelte';
+import NoteEditor from "./Note_editor.svelte";
+import { isEditMode, config, blockGlobalShortcut } from "$routes/app.store";
+import Icon from "@iconify/svelte";
 const ipc = window.ipc;
 let openEditor = false;
 let noteIndex;
@@ -23,7 +23,7 @@ function newNote() {
     <NoteEditor
         index={noteIndex}
         on:open={() => {
-            console.log('open');
+            console.log("open");
             $blockGlobalShortcut = true;
         }}
         on:save={() => {
@@ -36,12 +36,10 @@ function newNote() {
 {/if}
 
 <div class="container">
-    {#if $isEditMode}
-        <button class="newNote" on:click={() => newNote()}>
-            <Icon icon="iconamoon:edit" width="20" />
-            New Note
-        </button>
-    {/if}
+    <button class="newNote" on:click={() => newNote()}>
+        <Icon icon="iconamoon:edit" width="20" />
+        New Note
+    </button>
     {#if $config.note}
         {#each $config.note as note, index}
             <button
@@ -86,7 +84,7 @@ function newNote() {
         width: 100%;
         &:hover {
             .title {
-                color: $accent;
+                color: var(--accent-500);
             }
         }
         .title {

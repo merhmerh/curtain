@@ -1,13 +1,13 @@
 <script>
 export let isChecked = false;
-import Icon from '@iconify/svelte';
-import { createEventDispatcher } from 'svelte';
+import Icon from "@iconify/svelte";
+import { createEventDispatcher } from "svelte";
 
 const dispatch = createEventDispatcher();
 
 function toggleCheck() {
     isChecked = !isChecked;
-    dispatch('change', isChecked);
+    dispatch("change", isChecked);
 }
 </script>
 

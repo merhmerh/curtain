@@ -1,11 +1,11 @@
 <script>
-import { onMount } from 'svelte';
-import { isEditMode, config, session } from './app.store';
-import '../styles/main.scss';
-import Icon from '@iconify/svelte';
-import Header from '../lib/components/Header.svelte';
-import Modal from '$comp/Modal.svelte';
-import { timeout } from '$fn/helper';
+import { onMount } from "svelte";
+import { isEditMode, config, session } from "./app.store";
+import "../styles/main.scss";
+import Icon from "@iconify/svelte";
+import Header from "../lib/components/Header.svelte";
+import Modal from "$comp/Modal.svelte";
+import { getCSSVariableValue, setCSSVariableShades, timeout, updateCSSVariable } from "$fn/helper";
 let ipc;
 let ready,
     updateAppModal = false,
@@ -13,46 +13,62 @@ let ready,
 
 onMount(async () => {
     ipc = window.ipc;
-    ipc.receive('minimize', async (e) => {
+    ipc.receive("minimize", async (e) => {
         document.activeElement.blur();
         $isEditMode = false;
     });
 
-    ipc.receive('info', (e) => {
-        console.log('info', e);
+    ipc.receive("info", (e) => {
+        console.log("info", e);
         if (e.version) {
             $session = e;
         }
     });
 
-    ipc.receive('updateAvailable', async (v) => {
-        console.log('update available', v);
+    ipc.receive("updateAvailable", async (v) => {
+        console.log("update available", v);
         downloadedVersion = v;
 
         await timeout(500);
         updateAppModal = true;
     });
 
-    ipc.receive('updateError', (e) => {
-        console.log('update error', e);
+    ipc.receive("updateError", (e) => {
+        console.log("update error", e);
     });
 
-    ipc.receive('updateDownloaded', (e) => {
-        console.log('update downloaded', e);
+    ipc.receive("updateDownloaded", (e) => {
+        console.log("update downloaded", e);
     });
 
     await getConfig();
+    init();
     ready = true;
     console.log($session);
 });
 
 async function getConfig() {
-    const cfg = await ipc.promise('init');
+    const cfg = await ipc.promise("init");
+    console.log(cfg);
     config.set(cfg);
 }
 
+function init() {
+    const spacing = $config.settings?.appearance?.gap ?? 96;
+    updateCSSVariable("--grid-gap", `${spacing}px`);
+
+    const fontFamily =
+        $config.settings?.appearance?.fontFamily ?? getCSSVariableValue("--fontFamily");
+    const fontMonospace =
+        $config.settings?.appearance?.monospace ?? getCSSVariableValue("--monospace");
+    const accentHex = $config.settings?.appearance?.accent ?? getCSSVariableValue("--accent");
+    updateCSSVariable("--fontFamily", fontFamily);
+    updateCSSVariable("--monospace", fontMonospace);
+    setCSSVariableShades(accentHex);
+}
+
 function restartApp() {
-    ipc.send('restartApp');
+    ipc.send("restartApp");
 }
 </script>
 
@@ -108,9 +124,9 @@ function restartApp() {
             <slot />
         </main>
         <footer>
-            <div class="version">
-                {!$session.isDev ? 'v' + $session.version : 'Dev Version'}
-            </div>
+            <!-- <div class="version">
+                {!$session.isDev ? "v" + $session.version : "Dev Version"}
+            </div> -->
         </footer>
     </div>
 {/if}
@@ -118,18 +134,18 @@ function restartApp() {
 <style lang="scss">
 .container {
     padding: 2rem;
-    background-color: transparent;
+    background-color: rgba(#000, 0.8);
     height: 100vh;
     display: flex;
     flex-direction: column;
     gap: 3rem;
-
     main {
         height: calc(100% - 3rem);
         justify-content: space-between;
-        gap: 100px;
+        gap: var(--grid-gap);
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        transition: all 0.5s ease;
     }
 
     footer {
@@ -193,7 +209,7 @@ function restartApp() {
             align-items: center;
             gap: 0.5rem;
             font-weight: 600;
-            color: $accent;
+            color: var(--accent-500);
             font-size: 1.25rem;
             .icon {
                 @include flex-center;
