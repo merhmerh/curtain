@@ -22,7 +22,7 @@ Curtain is a versatile desktop overlay application that enhances your productivi
 
 ![screenshot](./.github/images/Screenshot_01.png)
 
-<img src="./.github/images/settings.png" width=50% height=50%>
+<img src="./.github/images/settings.png">
 
 Customize to your liking
 
@@ -38,7 +38,7 @@ use keyboard shortcut default: `ctrl` `shift` `D`
 
 #### To customize the columns and modules:
 
-Go to settings `ctrl` `p` or click on the gear icon at top right of the screen.
+Go to settings `ctrl` `P` or click on the gear icon at top right of the screen.
 
 Select appearance in the settings menu on the left.
 

@@ -69,6 +69,9 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.cjs'),
         }
     });
+
+    mainWindow.setBounds(primaryDisplay.bounds)
+
     // windowState.manage(mainWindow);
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
@@ -343,6 +346,21 @@ function mainProcessEventListener() {
                 })
         })
     })
+
+    ipcMain.on('moveDisplay', () => {
+        const displays = screen.getAllDisplays()
+        console.log(displays);
+        for (const display of displays) {
+            const { x, y, width, height } = display.bounds;
+            if (x !== 0 && y !== 0) {
+                console.log(x, y);
+                mainWindow.setBounds(display.bounds)
+            }
+        }
+    })
+
+
+
 }
 
 function setRunOnStart() {
@@ -410,6 +428,8 @@ function registerOverlayShortcut(keys) {
             mainWindow.hide()
         } else {
             mainWindow.show()
+            const primaryDisplay = screen.getPrimaryDisplay();
+            mainWindow.setBounds(primaryDisplay.bounds);
         }
     })
 }

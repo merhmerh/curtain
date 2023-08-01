@@ -72,6 +72,10 @@ function restartApp() {
 }
 </script>
 
+<!-- <button
+    on:click={() => {
+        ipc.send("moveDisplay");
+    }}>move</button> -->
 {#if ready}
     {#if updateAppModal}
         <Modal closeButton={false}>
