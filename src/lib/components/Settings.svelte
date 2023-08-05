@@ -4,6 +4,8 @@ import Icon from "@iconify/svelte";
 import General from "./settings/General.svelte";
 import Appearance from "./settings/Appearance.svelte";
 import About from "./settings/About.svelte";
+import ModulesList from "./settings/Modules/Modules_List.svelte";
+import ClipboardSettings from "./settings/Modules/ClipboardSettings.svelte";
 
 let selected = "general";
 
@@ -38,6 +40,31 @@ function changeNav(name) {
             <span>Appearance</span>
         </button>
 
+        <ModulesList
+            on:selectModule={(module) => {
+                selected = module;
+            }}>
+            <button
+                class="none"
+                class:active={selected == "clipboard"}
+                on:click={() => {
+                    changeNav("clipboard");
+                }}>
+                <Icon icon="uil:clipboard" height="24" />
+                <span>Clipboard</span>
+            </button>
+
+            <button
+                class="none"
+                class:active={selected == "todo"}
+                on:click={() => {
+                    changeNav("todo");
+                }}>
+                <Icon icon="icon-park-outline:list" height="24" />
+                <span>Todo List</span>
+            </button>
+        </ModulesList>
+
         <button
             class="none last"
             class:active={selected == "about"}
@@ -51,7 +78,7 @@ function changeNav(name) {
         </button>
     </div>
 
-    <div class="content">
+    <div class="SettingsContent">
         {#if selected == "general"}
             <General />
         {/if}
@@ -63,13 +90,18 @@ function changeNav(name) {
         {#if selected == "about"}
             <About />
         {/if}
+
+        {#if selected == "clipboard"}
+            <ClipboardSettings />
+        {/if}
     </div>
 </div>
 
 <style lang="scss">
 .container {
-    // position: fixed;
-    // left: 1600px;
+    // margin-left: 1300px;
+    position: fixed;
+    left: 1600px;
     padding-right: 2rem;
     display: grid;
     grid-template-columns: auto 600px;
@@ -83,7 +115,7 @@ function changeNav(name) {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    width: 200px;
+    width: 220px;
     button {
         display: flex;
         gap: 0.5rem;
@@ -110,7 +142,7 @@ function changeNav(name) {
         }
     }
 }
-.content {
+.SettingsContent {
     // background-color: beige;
     margin-top: 1rem;
     padding: 2rem;

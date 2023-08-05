@@ -13,12 +13,12 @@ let showRestartPrompt;
 onMount(() => {
     if (!$config.settings?.app?.showOnTaskbar) {
         setNestedProperty($config, "settings.app.runOnStartUp", true);
-        console.log($config);
+        // console.log($config);
     }
 
     if (!$config.settings?.app?.showOnTaskbar) {
         setNestedProperty($config, "settings.app.showOnTaskbar", false);
-        console.log($config);
+        // console.log($config);
     }
 
     pageReady = true;
@@ -26,7 +26,7 @@ onMount(() => {
 
 function getOverlayShortcut() {
     let str = $config.settings?.app?.kbs_overlay ?? "Shift+CommandOrControl+D";
-    console.log(str);
+    // console.log(str);
     return destructureKeys(str);
 }
 
@@ -130,33 +130,6 @@ function registerNewOverlayShortcut(k) {
 {/if}
 
 <style lang="scss">
-.card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.5rem;
-    justify-content: space-between;
-    &.column {
-        display: flex;
-        flex-direction: column;
-    }
-    .context {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        span.title {
-            font-weight: 600;
-            color: var(--main-200);
-        }
-        span.description {
-            font-size: 0.875rem;
-        }
-    }
-    &:not(:last-child) {
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid var(--main-800);
-    }
-}
-
 .restartPrompt {
     background-color: $bg-alt;
     margin-top: 1rem;

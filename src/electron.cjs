@@ -347,17 +347,17 @@ function mainProcessEventListener() {
         })
     })
 
-    ipcMain.on('moveDisplay', () => {
-        const displays = screen.getAllDisplays()
-        console.log(displays);
-        for (const display of displays) {
-            const { x, y, width, height } = display.bounds;
-            if (x !== 0 && y !== 0) {
-                console.log(x, y);
-                mainWindow.setBounds(display.bounds)
-            }
-        }
-    })
+    // ipcMain.on('moveDisplay', () => {
+    //     const displays = screen.getAllDisplays()
+    //     console.log(displays);
+    //     for (const display of displays) {
+    //         const { x, y, width, height } = display.bounds;
+    //         if (x !== 0 && y !== 0) {
+    //             console.log(x, y);
+    //             mainWindow.setBounds(display.bounds)
+    //         }
+    //     }
+    // })
 
 
 
@@ -427,9 +427,9 @@ function registerOverlayShortcut(keys) {
             mainWindow.webContents.send('minimize')
             mainWindow.hide()
         } else {
-            mainWindow.show()
             const primaryDisplay = screen.getPrimaryDisplay();
             mainWindow.setBounds(primaryDisplay.bounds);
+            mainWindow.show()
         }
     })
 }

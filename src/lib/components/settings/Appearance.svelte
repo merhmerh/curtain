@@ -50,10 +50,10 @@ async function updateColumns(column) {
     }
 
     if (column < $config.modules.length) {
-        console.log("reduce");
+        // console.log("reduce");
         $config.modules.splice(column);
     } else {
-        console.log("increase");
+        // console.log("increase");
 
         for (const [i, _] of Array(Number(column)).entries()) {
             if (!$config.modules[i]) {
@@ -63,7 +63,7 @@ async function updateColumns(column) {
     }
     $config = $config;
     saveConfig().then(() => {
-        console.log("config saved");
+        // console.log("config saved");
     });
 }
 
@@ -77,7 +77,6 @@ async function getFonts() {
     //get current style
     const fontFamily = getCSSVariableValue("--fontFamily");
     const fontMonospace = getCSSVariableValue("--monospace");
-    console.log(fontMonospace);
     let f;
     if ($session.settings?.fontList) {
         f = $session.settings.fontList;
@@ -267,28 +266,6 @@ function updateAccentColor() {
     }
 }
 
-.card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.5rem;
-    justify-content: space-between;
-    .context {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        span.title {
-            font-weight: 600;
-            color: var(--main-200);
-        }
-        span.description {
-            font-size: 0.875rem;
-        }
-    }
-    &:not(:last-child) {
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid var(--main-800);
-    }
-}
 .select {
     width: 300px;
     & :global() {

@@ -371,3 +371,32 @@ input[type="number"]::-webkit-outer-spin-button {
         }
     }
 }
+
+.SettingsContent {
+    .card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.5rem;
+        justify-content: space-between;
+        &.column {
+            display: flex;
+            flex-direction: column;
+        }
+        .context {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            span.title {
+                font-weight: 600;
+                color: var(--main-200);
+            }
+            span.description {
+                font-size: 0.875rem;
+            }
+        }
+        &:not(:last-child) {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--main-800);
+        }
+    }
+}

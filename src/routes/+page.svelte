@@ -1,6 +1,7 @@
 <script>
-import Kbs from "$comp/Kbs.svelte";
+import Clipboard from "$comp/Clipboard.svelte";
 import Notify from "$comp/Notify/Notify.svelte";
+import Unicode from "$comp/Unicode.svelte";
 import { saveConfig } from "$fn/helper";
 import Note from "../lib/components/Note.svelte";
 import Shortcut from "../lib/components/Shortcut.svelte";
@@ -35,8 +36,10 @@ if (!$config.modules) {
 {#if $config.modules}
     {#each $config.modules as module, index}
         <Wrapper {index}>
-            {#if module == "kbs"}
-                <Kbs />
+            {#if module == "clipboard"}
+                <Clipboard />
+            {:else if module == "unicode"}
+                <Unicode />
             {:else if module == "note"}
                 <Note />
             {:else if module == "todo"}

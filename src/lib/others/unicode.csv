@@ -1,0 +1,59 @@
+﻿Math,≠,Not equal
+Math,≈,Approximate
+Math,>,More than
+Math,<,Less than
+Math,≥,More or equal than
+Math,≤,Less or equal than
+Math,±,plus minus
+Math,×,"multiplication x, times"
+Math,⋅,multiplication dot
+Math,÷,divide
+Math,°,degree
+Math,π,pi
+Math,x,"x, variable"
+Math,√,"radical, root"
+Math,∠,angle
+Math,≡,"===, equivalence"
+Math,∝,proportion
+Math,θ,theta
+Math,λ,lambda
+Dinbats,✓,Check mark
+Dinbats,✔,Heavy check mark
+Dinbats,✕,Multiplication X
+Dinbats,✖,Heavy multiplication X
+Dinbats,✗,Ballot X
+Dinbats,✘,Heavy ballot X
+Dinbats,❌,Cross mark
+Dinbats,✦,Black four-pointed star
+Dinbats,✨,Sparkles
+Dinbats,✱,Heavy asterisk
+Dinbats,✿,Black florette
+Dinbats,✉,Envelope
+Arrows,←,Arrow Left
+Arrows,↑,Arrow Up
+Arrows,→,Arrow Right
+Arrows,↓,Arrow Down
+Arrows,↔,Arrow Left Right
+Arrows,↕,Arrow Up Down
+Arrows,⇐,Double Arrow left
+Arrows,⇑,Double Arrow Up
+Arrows,⇒,Double Arrow Right
+Arrows,⇓,Double Arrow Down
+Arrows,⇔,Double Arrow Left Right
+Arrows,⇕,Double Arrow Up Down
+Common,º,Superscript zero
+Common,²,superscript two
+Common,³,Superscript three
+Common,¼,"one quarter, 1/4"
+Common,½,"one half, 1/2"
+Common,¾,"three quarter, 3/4"
+Common,·,"Interpunct, dot"
+Common,©,Copyright
+Common,α,alpha
+Common,β,beta
+Common,γ,gamma
+Common,δ,delta
+Common,ω,omega
+Common,Ω,omega
+
+

@@ -1,17 +1,18 @@
 <script>
-import Select from './Select.svelte';
-import { isEditMode, config } from '$routes/app.store';
-import { saveConfig } from '$fn/helper';
+import Select from "./Select.svelte";
+import { isEditMode, config } from "$routes/app.store";
+import { saveConfig } from "$fn/helper";
 
 export let index;
 
 const options = [
-    { value: 'kbs', label: 'Keyboard Shortcuts' },
-    { value: 'note', label: 'Note' },
-    { value: 'todo', label: 'To-do List' },
-    { value: 'shortcut', label: 'Shortcut' },
-    { value: 'utilities', label: 'Utilities' },
-    { value: 'none', label: 'None' },
+    { value: "unicode", label: "Unicode" },
+    { value: "clipboard", label: "Clipboard" },
+    { value: "note", label: "Note" },
+    { value: "todo", label: "To-do List" },
+    { value: "shortcut", label: "Shortcut" },
+    { value: "utilities", label: "Utilities" },
+    { value: "none", label: "None" },
 ];
 
 function getFirstItem() {
