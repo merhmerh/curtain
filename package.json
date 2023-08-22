@@ -1,6 +1,6 @@
 {
     "name": "curtain",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "type": "module",
     "main": "src/electron.cjs",
     "description": "Customizable window overlay",
