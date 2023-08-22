@@ -26,7 +26,7 @@ let draggingThis, newSymbol, addToCategory, isDragging;
 let ipc = window.ipc;
 
 function setCodes() {
-    if ($config.unicode.data) {
+    if ($config.unicode?.data) {
         return $config.unicode.data;
     }
 
