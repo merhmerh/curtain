@@ -1,13 +1,12 @@
 <script>
-import Clipboard from "$comp/Clipboard.svelte";
-import Notify from "$comp/Notify/Notify.svelte";
-import Unicode from "$comp/Unicode.svelte";
 import { saveConfig } from "$fn/helper";
-import Note from "../lib/components/Note.svelte";
-import Shortcut from "../lib/components/Shortcut.svelte";
-import Todo from "../lib/components/Todo.svelte";
-import Utilities from "../lib/components/Utilities.svelte";
-import Wrapper from "../lib/components/Wrapper.svelte";
+import Notify from "$comp/Notify/Notify.svelte";
+import Wrapper from "$comp/Wrapper.svelte";
+import Todo from "$comp/Todo/Todo.svelte";
+import Shortcut from "$comp/Shortcut/Shortcut.svelte";
+import Note from "$comp/Note/Note.svelte";
+import Utilities from "$comp/Utilities/Utilities.svelte";
+import Unicode from "$comp/Unicode/Unicode.svelte";
 import { isEditMode, config, blockGlobalShortcut } from "./app.store";
 
 function handleShortcut(e) {
@@ -36,9 +35,7 @@ if (!$config.modules) {
 {#if $config.modules}
     {#each $config.modules as module, index}
         <Wrapper {index}>
-            {#if module == "clipboard"}
-                <Clipboard />
-            {:else if module == "unicode"}
+            {#if module == "unicode"}
                 <Unicode />
             {:else if module == "note"}
                 <Note />

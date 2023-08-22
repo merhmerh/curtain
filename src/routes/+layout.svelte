@@ -5,7 +5,12 @@ import "../styles/main.scss";
 import Icon from "@iconify/svelte";
 import Header from "../lib/components/Header.svelte";
 import Modal from "$comp/Modal.svelte";
-import { getCSSVariableValue, setCSSVariableShades, timeout, updateCSSVariable } from "$fn/helper";
+import {
+    getCSSVariableValue,
+    setCSSVariableShades,
+    saveConfig,
+    updateCSSVariable,
+} from "$fn/helper";
 let ipc;
 let ready,
     updateAppModal = false,
@@ -42,6 +47,7 @@ onMount(async () => {
     });
 
     await getConfig();
+    cleanup();
     init();
     ready = true;
     console.log($session);
@@ -69,6 +75,32 @@ function init() {
 
 function restartApp() {
     ipc.send("restartApp");
+}
+
+function cleanup() {
+    let toSave;
+
+    if ($config.clipboard) {
+        delete $config.clipboard;
+        toSave = true;
+    }
+
+    if ($config.kbs) {
+        delete $config.kbs;
+        toSave = true;
+    }
+
+    if (Array.isArray($config.todos)) {
+        const arr = $config.todos;
+        $config.todos = {
+            data: arr,
+        };
+        console.log($config);
+    }
+
+    if (toSave) {
+        saveConfig();
+    }
 }
 </script>
 

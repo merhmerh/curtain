@@ -7,7 +7,7 @@ import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
-import Modal from "./Modal.svelte";
+import Modal from "$comp/Modal.svelte";
 
 const dispatch = createEventDispatcher();
 

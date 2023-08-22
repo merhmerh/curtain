@@ -3,51 +3,61 @@ import Icon from "@iconify/svelte";
 import { isEditMode, config } from "$routes/app.store";
 import { saveConfig } from "$fn/helper";
 
+if ($config.todos.config.clearRecycleBinOnRestart) {
+    delete $config.todos.recycleBin;
+    saveConfig();
+}
+
 let newTaskString;
-let recycleBinOpen,
-    recycleBin = [];
+let recycleBinOpen = true,
+    recycleBin = $config.todos.recycleBin || [];
 
 function addEntry() {
     if (!newTaskString) return;
-    if (!$config.todos) {
-        $config.todos = [];
+    if (!$config.todos.data) {
+        $config.todos.data = {
+            data: [],
+        };
     }
-    $config.todos.push({ task: newTaskString, done: false });
+    $config.todos.data.push({ task: newTaskString, done: false });
     $config = $config;
     newTaskString = "";
     save();
 }
 
 function removeEntry(index) {
-    const row = $config.todos[index];
+    const row = $config.todos.data[index];
     recycleBin = [row, ...recycleBin];
-    $config.todos.splice(index, 1);
-    $config.todos = $config.todos;
+    $config.todos.data.splice(index, 1);
+    $config.todos.data = $config.todos.data;
+
     save();
 }
 
 function updateEntry(index) {
-    $config.todos[index].done = !$config.todos[index].done;
-    $config.todos = $config.todos;
+    $config.todos.data[index].done = !$config.todos.data[index].done;
+    $config.todos.data = $config.todos.data;
 
-    saveConfig();
+    save();
 }
 
 function save() {
-    $config.todos.map((x) => {
+    $config.todos.data.map((x) => {
+        console.log(x);
         delete x.edit;
     });
+
+    $config.todos.recycleBin = recycleBin;
 
     saveConfig();
 }
 
 function recycle(index) {
     const row = recycleBin[index];
-    $config.todos.push(row);
+    $config.todos.data.push(row);
     $config = $config;
 
     removeFromRecycleBin(index);
-
     save();
 }
 
@@ -78,9 +88,9 @@ function removeFromRecycleBin(index) {
         </div>
     </div>
 
-    <div class="tasks">
-        {#if $config.todos}
-            {#each $config.todos as todo, index}
+    <div class="tasks" class:shrink={$isEditMode}>
+        {#if $config.todos.data}
+            {#each $config.todos.data as todo, index}
                 <div class="task-container">
                     {#if !todo.edit}
                         <button
@@ -104,7 +114,7 @@ function removeFromRecycleBin(index) {
                             bind:value={todo.task}
                             on:keydown={(e) => {
                                 if (e.key == "Enter") {
-                                    saveConfig();
+                                    save();
                                     todo.edit = false;
                                 }
                             }} />
@@ -116,7 +126,7 @@ function removeFromRecycleBin(index) {
                                 class="icon save"
                                 on:click={() => {
                                     todo.edit = false;
-                                    saveConfig();
+                                    save();
                                 }}>
                                 <Icon icon="mingcute:check-line" height="16" />
                             </button>
@@ -142,7 +152,7 @@ function removeFromRecycleBin(index) {
         {/if}
     </div>
 
-    {#if $isEditMode}
+    {#if $isEditMode && recycleBin.length > 0}
         <div class="recycleBin">
             <div class="title">
                 <Icon icon="fluent:bin-recycle-20-filled" height="32" />
@@ -194,6 +204,7 @@ function removeFromRecycleBin(index) {
     flex-direction: column;
     gap: 1rem;
     min-width: 0;
+    overflow-y: auto;
 }
 
 .inputBox {
@@ -215,6 +226,11 @@ function removeFromRecycleBin(index) {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    overflow: auto;
+    max-height: calc(100vh - 5rem - 164px);
+    &.shrink {
+        max-height: calc(100vh - 600px);
+    }
     .task-container {
         display: flex;
         align-items: center;
@@ -284,7 +300,7 @@ function removeFromRecycleBin(index) {
 }
 
 .recycleBin {
-    margin-top: 2rem;
+    margin-top: 1rem;
     background-color: $bg-s;
     padding: 0.5rem;
     border-radius: 0.5rem;

@@ -7,7 +7,6 @@ export let index;
 
 const options = [
     { value: "unicode", label: "Unicode" },
-    { value: "clipboard", label: "Clipboard" },
     { value: "note", label: "Note" },
     { value: "todo", label: "To-do List" },
     { value: "shortcut", label: "Shortcut" },

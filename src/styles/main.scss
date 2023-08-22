@@ -127,7 +127,7 @@ button {
     }
 
     &:disabled {
-        background-color: $grey-lighter;
+        background-color: g $grey-lighter;
         border: 1px solid $grey-light;
         color: $grey;
         pointer-events: none;
@@ -139,7 +139,7 @@ button {
 
     &.warning {
         background-color: $warning;
-        color: $main;
+        color: var(--main-200);
         border: 1px solid transparent;
         img {
             filter: brightness(0) saturate(100%) invert(98%) sepia(100%) saturate(6946%) hue-rotate(184deg)
@@ -238,7 +238,7 @@ textarea {
     color: $main;
 
     &::placeholder {
-        color: $main-light;
+        color: var(--main-600);
         font-size: 0.875rem;
     }
 
@@ -275,8 +275,8 @@ textarea {
     display: flex;
     align-items: center;
     &:focus-within {
-        border: 1px solid transparent;
-        outline: 1px solid var(--accent-500);
+        // border: 1px solid transparent;
+        border: 1px solid var(--accent-500);
     }
     .prefix {
         color: $grey-light;
@@ -376,7 +376,7 @@ input[type="number"]::-webkit-outer-spin-button {
     .card {
         display: grid;
         grid-template-columns: 1fr auto;
-        gap: 0.5rem;
+        gap: 1rem;
         justify-content: space-between;
         &.column {
             display: flex;

@@ -364,7 +364,7 @@ function mainProcessEventListener() {
 }
 
 function setRunOnStart() {
-    if (!isDev) return
+    if (isDev) return
 
     let runOnStartUp = false
     try {

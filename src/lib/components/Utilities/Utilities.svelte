@@ -1,5 +1,5 @@
 <script>
-import Alarm from './Alarm.svelte';
+import Alarm from "./Alarm.svelte";
 </script>
 
 <div class="container">

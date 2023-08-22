@@ -1,11 +1,12 @@
 <script>
 import Icon from "@iconify/svelte";
 
-import General from "./settings/General.svelte";
-import Appearance from "./settings/Appearance.svelte";
-import About from "./settings/About.svelte";
-import ModulesList from "./settings/Modules/Modules_List.svelte";
-import ClipboardSettings from "./settings/Modules/ClipboardSettings.svelte";
+import General from "./General.svelte";
+import Appearance from "./Appearance.svelte";
+import About from "./About.svelte";
+import ModulesList from "./Modules/Modules_List.svelte";
+import UnicodeSettings from "./Modules/Unicode_settings.svelte";
+import TodosSettings from "./Modules/Todos_settings.svelte";
 
 let selected = "general";
 
@@ -46,19 +47,19 @@ function changeNav(name) {
             }}>
             <button
                 class="none"
-                class:active={selected == "clipboard"}
+                class:active={selected == "unicode"}
                 on:click={() => {
-                    changeNav("clipboard");
+                    changeNav("unicode");
                 }}>
-                <Icon icon="uil:clipboard" height="24" />
-                <span>Clipboard</span>
+                <Icon icon="uil:spade" height="24" />
+                <span>Unicode</span>
             </button>
 
             <button
                 class="none"
                 class:active={selected == "todo"}
                 on:click={() => {
-                    changeNav("todo");
+                    changeNav("todos");
                 }}>
                 <Icon icon="icon-park-outline:list" height="24" />
                 <span>Todo List</span>
@@ -91,17 +92,20 @@ function changeNav(name) {
             <About />
         {/if}
 
-        {#if selected == "clipboard"}
-            <ClipboardSettings />
+        {#if selected == "unicode"}
+            <UnicodeSettings />
+        {/if}
+
+        {#if selected == "todos"}
+            <TodosSettings />
         {/if}
     </div>
 </div>
 
 <style lang="scss">
 .container {
-    // margin-left: 1300px;
-    position: fixed;
-    left: 1600px;
+    // position: fixed;
+    // left: 1600px;
     padding-right: 2rem;
     display: grid;
     grid-template-columns: auto 600px;

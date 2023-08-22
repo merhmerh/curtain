@@ -1,7 +1,7 @@
 <script>
 import Icon from "@iconify/svelte";
 import { isEditMode } from "$routes/app.store";
-import Settings from "./Settings.svelte";
+import Settings from "$comp/settings/Settings.svelte";
 import Modal from "./Modal.svelte";
 
 let settingsModal;

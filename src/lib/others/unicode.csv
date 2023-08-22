@@ -1,4 +1,19 @@
-﻿Math,≠,Not equal
+﻿Common,º,Superscript zero
+Common,¹,Superscript one
+Common,²,superscript two
+Common,³,Superscript three
+Common,¼,"one quarter, 1/4"
+Common,½,"one half, 1/2"
+Common,¾,"three quarter, 3/4"
+Common,·,"Interpunct, dot"
+Common,©,Copyright
+Common,α,alpha
+Common,β,beta
+Common,γ,gamma
+Common,δ,delta
+Common,ω,omega
+Common,Ω,omega
+Math,≠,Not equal
 Math,≈,Approximate
 Math,>,More than
 Math,<,Less than
@@ -41,19 +56,5 @@ Arrows,⇒,Double Arrow Right
 Arrows,⇓,Double Arrow Down
 Arrows,⇔,Double Arrow Left Right
 Arrows,⇕,Double Arrow Up Down
-Common,º,Superscript zero
-Common,²,superscript two
-Common,³,Superscript three
-Common,¼,"one quarter, 1/4"
-Common,½,"one half, 1/2"
-Common,¾,"three quarter, 3/4"
-Common,·,"Interpunct, dot"
-Common,©,Copyright
-Common,α,alpha
-Common,β,beta
-Common,γ,gamma
-Common,δ,delta
-Common,ω,omega
-Common,Ω,omega
 
 
