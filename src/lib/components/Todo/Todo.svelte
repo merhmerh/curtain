@@ -3,7 +3,7 @@ import Icon from "@iconify/svelte";
 import { isEditMode, config } from "$routes/app.store";
 import { saveConfig } from "$fn/helper";
 
-if ($config.todos.config.clearRecycleBinOnRestart) {
+if ($config.todos.config?.clearRecycleBinOnRestart) {
     delete $config.todos.recycleBin;
     saveConfig();
 }
