@@ -1,7 +1,7 @@
 <script>
 import Select from "./Select.svelte";
 import { isEditMode, config } from "$routes/app.store";
-import { saveConfig } from "$fn/helper";
+import { saveConfig, generateID } from "$fn/helper";
 
 export let index;
 
@@ -11,12 +11,18 @@ const options = [
     { value: "todo", label: "To-do List" },
     { value: "shortcut", label: "Shortcut" },
     { value: "utilities", label: "Utilities" },
+    { value: "custom", label: "Custom" },
     { value: "none", label: "None" },
 ];
 
 function getFirstItem() {
     for (const [i, r] of options.entries()) {
+        if ($config.modules[index].split("-")[0] == "custom") {
+            const index = options.findIndex((x) => x.value == "custom");
+            return index;
+        }
         if ($config.modules[index] == r.value) {
+            console.log(i);
             return i;
         }
     }
@@ -24,7 +30,21 @@ function getFirstItem() {
 
 function changeModule(e) {
     const selection = e.detail;
-    $config.modules[index] = selection.value;
+    if (selection.value == "custom") {
+        $config.modules[index] = `${selection.value}-${generateID(12)}`;
+    } else {
+        $config.modules[index] = selection.value;
+    }
+
+    //get modules
+    const customModules = $config.modules.filter((x) => x.split("-")[0] == "custom");
+    for (const [key, data] of Object.entries($config)) {
+        if (key.includes("custom-")) {
+            if (!customModules.includes(key)) {
+                delete $config[key];
+            }
+        }
+    }
     saveConfig();
 }
 </script>
@@ -44,5 +64,7 @@ function changeModule(e) {
     flex-direction: column;
     gap: 1rem;
     min-width: 0;
+    height: calc(100vh - 4rem - 80px);
+    overflow: auto;
 }
 </style>

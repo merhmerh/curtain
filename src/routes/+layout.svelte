@@ -175,6 +175,7 @@ function cleanup() {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    overflow: hidden;
     main {
         height: calc(100% - 3rem);
         justify-content: space-between;

@@ -8,6 +8,7 @@ import Note from "$comp/Note/Note.svelte";
 import Utilities from "$comp/Utilities/Utilities.svelte";
 import Unicode from "$comp/Unicode/Unicode.svelte";
 import { isEditMode, config, blockGlobalShortcut } from "./app.store";
+import Custom from "$comp/Custom/Custom.svelte";
 
 function handleShortcut(e) {
     if ($blockGlobalShortcut) return;
@@ -45,6 +46,8 @@ if (!$config.modules) {
                 <Shortcut />
             {:else if module == "utilities"}
                 <Utilities />
+            {:else if module.split("-")[0] == "custom"}
+                <Custom id={module} />
             {:else if module == "none"}
                 <!--  -->
             {/if}

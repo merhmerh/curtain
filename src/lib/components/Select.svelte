@@ -1,9 +1,27 @@
+<script context="module">
+export function initItems(arr) {
+    const items = [];
+    arr.forEach((item) => {
+        if (typeof item !== "object") {
+            return items.push({
+                value: item,
+                label: item,
+            });
+        }
+        item.match = true;
+        items.push(item);
+    });
+    return items;
+}
+</script>
+
 <script>
 import { createEventDispatcher, onMount, tick } from "svelte";
 import Icon from "@iconify/svelte";
 let open = false;
 export let firstItem = 0;
 export let items;
+export let size = "";
 export let border = false;
 export let searchable = false;
 export let maxHeight = 220;
@@ -34,7 +52,6 @@ const arrItems = (() => {
 })();
 
 export let selected = placeholder ? null : arrItems[firstItem];
-
 function clickOutside(element, callback) {
     document.body.addEventListener("click", onClick);
 
@@ -110,7 +127,11 @@ export function reset() {
 
 {#if items}
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="select_container" use:clickOutside>
+    <div
+        class="select_container"
+        use:clickOutside
+        class:small={size == "small"}
+        class:smaller={size == "smaller"}>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
             class="select"
@@ -169,13 +190,12 @@ export function reset() {
 .select_container {
     height: 100%;
     height: fit-content;
-    // max-height: 48px;
     position: relative;
 }
 .select {
     background-color: $bg-p;
     min-width: 200px;
-    border: 1px solid $grey-lighter;
+    border: 1px solid var(--main-900);
     padding: 0.75rem;
     border-radius: 0.5rem;
     width: 100%;
@@ -184,7 +204,7 @@ export function reset() {
     align-items: center;
     cursor: pointer;
     &.placeholder {
-        color: $main-light;
+        color: var(--main-700);
     }
     &.focus {
         border-color: var(--accent-500);
@@ -193,7 +213,7 @@ export function reset() {
     .expand {
         @include flex-center;
         margin-left: auto;
-        color: $grey-light;
+        color: var(--main-600);
     }
 
     &.error {
@@ -206,20 +226,19 @@ export function reset() {
     right: 0;
     margin-top: 0.5rem;
     border-radius: 0.5rem;
-    border: 1px solid $grey-lighter;
+    border: 1px solid var(--main-800);
     width: 100%;
     background-color: $bg-p;
     display: flex;
     flex-direction: column;
     z-index: 200;
-    // box-shadow: 0 2px 4px rgba(125, 125, 125, 0.12);
     max-height: 220px;
     overflow: hidden;
 
     input {
         border: none;
         border-radius: 0;
-        border-bottom: 1px solid $grey-lighter;
+        border-bottom: 1px solid var(--main-900);
         font-style: inherit;
         padding-block: 0.75rem;
         &:focus {
@@ -234,13 +253,11 @@ export function reset() {
     .items_container {
         height: auto;
         overflow-y: auto;
-        padding-block: 0.25rem;
-
         .item {
             padding: 0.5rem;
             cursor: pointer;
             &:hover {
-                background-color: $grey-lightest;
+                background-color: var(--main-900);
             }
 
             &.hide {
@@ -248,10 +265,11 @@ export function reset() {
             }
 
             &.selected {
-                background-color: rgba(var(--accent-rgb), 0.25);
+                background-color: var(--accent-600);
+                color: var(--main-100);
             }
             &.border {
-                border-bottom: 1px solid $grey-lightest;
+                border-bottom: 1px solid var(--main-900);
             }
         }
 
@@ -259,6 +277,36 @@ export function reset() {
             padding: 0.5rem;
             color: $main-light;
             text-align: center;
+        }
+    }
+}
+
+.small {
+    .select {
+        border-radius: 0.325rem 0.325rem;
+        padding-block: 0.5rem;
+    }
+    .dropdown {
+        border-radius: 0.325rem;
+    }
+    .items_container {
+        .item {
+            padding-block: 0.325rem;
+        }
+    }
+}
+
+.smaller {
+    .select {
+        border-radius: 0.25rem 0.25rem;
+        padding-block: 0.325rem;
+    }
+    .dropdown {
+        border-radius: 0.25rem;
+    }
+    .items_container {
+        .item {
+            padding-block: 0.325rem;
         }
     }
 }

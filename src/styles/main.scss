@@ -229,7 +229,7 @@ textarea {
     font-family: inherit;
     font-size: inherit;
     outline: none;
-    border: 1px solid $grey-lighter;
+    border: 1px solid var(--main-800);
     background-color: $bg-p;
     padding: 0.5rem;
     border-radius: 0.25rem;
@@ -267,7 +267,7 @@ textarea {
     font-family: inherit;
     font-size: inherit;
     outline: none;
-    border: 1px solid $grey-lighter;
+    border: 1px solid var(--main-800);
     background-color: $bg-p;
     padding-inline: 0.5rem 0;
     border-radius: 0.25rem;
@@ -301,25 +301,28 @@ textarea {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 18px;
     height: 6px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    border-radius: 100px;
+    // border-radius: 100px;
     // background: $bg-p;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background: $scrollthumb;
+    border: 6px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    // border-radius: 9999px;
+    background-color: $scrollthumb;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: $scrollthumb-hover;
+    // background: $scrollthumb-hover;
 }
 
 ::-webkit-scrollbar-corner {
