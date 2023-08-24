@@ -3,14 +3,14 @@ import Icon from "@iconify/svelte";
 import { isEditMode, config } from "$routes/app.store";
 import { saveConfig } from "$fn/helper";
 
-if ($config.todos.config?.clearRecycleBinOnRestart) {
-    delete $config.todos.recycleBin;
+if ($config.todos?.config?.clearRecycleBinOnRestart) {
+    delete $config.todos?.recycleBin;
     saveConfig();
 }
 
 let newTaskString;
 let recycleBinOpen = true,
-    recycleBin = $config.todos.recycleBin || [];
+    recycleBin = $config.todos?.recycleBin || [];
 
 function addEntry() {
     if (!newTaskString) return;
@@ -89,7 +89,7 @@ function removeFromRecycleBin(index) {
     </div>
 
     <div class="tasks" class:shrink={$isEditMode}>
-        {#if $config.todos.data}
+        {#if $config.todos?.data}
             {#each $config.todos.data as todo, index}
                 <div class="task-container">
                     {#if !todo.edit}
