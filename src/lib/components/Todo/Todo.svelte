@@ -1,7 +1,7 @@
 <script>
 import Icon from "@iconify/svelte";
 import { isEditMode, config } from "$routes/app.store";
-import { saveConfig } from "$fn/helper";
+import { saveConfig, setNestedProperty } from "$fn/helper";
 
 if ($config.todos?.config?.clearRecycleBinOnRestart) {
     delete $config.todos?.recycleBin;
@@ -14,10 +14,11 @@ let recycleBinOpen = true,
 
 function addEntry() {
     if (!newTaskString) return;
-    if (!$config.todos.data) {
-        $config.todos.data = {
-            data: [],
-        };
+    if (!$config.todos?.data) {
+        setNestedProperty($config, "todos.data", []);
+        // $config.todos.data = {
+        // data: [],
+        // };
     }
     $config.todos.data.push({ task: newTaskString, done: false });
     $config = $config;
