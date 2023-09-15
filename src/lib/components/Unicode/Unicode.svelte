@@ -12,7 +12,7 @@ import csv from "$lib/others/unicode.csv?raw";
 import Select from "$comp/Select.svelte";
 import { isEditMode, config } from "$routes/app.store";
 import { notify } from "$comp/Notify/notify.store";
-import { saveConfig } from "$fn/helper";
+import { saveConfig, timeout } from "$fn/helper";
 
 let codes = setCodes();
 
@@ -240,8 +240,9 @@ function save() {
                     {#each items as item (item.id)}
                         <button
                             class="none card"
-                            on:click={() => {
+                            on:click={async () => {
                                 navigator.clipboard.writeText(item.symbol);
+                                await timeout(100);
                                 notify.add("Copied to clipboard");
                                 if ($config.unicode.config.hideOverlayOnCopy) {
                                     ipc.send("hide");

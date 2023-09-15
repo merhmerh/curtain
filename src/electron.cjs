@@ -91,9 +91,11 @@ contextMenu({
 
 async function createMainWindow() {
     mainWindow = createWindow();
-    if (!isDev) {
-        mainWindow.setAlwaysOnTop(true)
-    }
+    // if (!isDev) {
+    //     mainWindow.setAlwaysOnTop(true)
+    // }
+    // mainWindow.setAlwaysOnTop(true)
+
     mainWindow.once('close', () => {
         mainWindow = null;
     });
